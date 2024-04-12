@@ -13,14 +13,15 @@ namespace algebra{
         values=std::vector<T>(n_nnz);
         std::size_t count=0,i=0,row=0;
         for(auto iter=COOmap.cbegin();iter!=COOmap.cend();++iter){
-            bool start_row=false; //flag to check when the first non null element of a row is
+            if(iter->first[0]!=row) //I reset the flag when I go to the next row in the matrix
+                bool start_row=false; //flag to check when the first non null element of a row is
             if(iter->second!=0){
                 values[i]=iter->second;//store nnz value
                 outer_indices=iter->first[1];//store column index
-                if(!flag){//when the row has the first non zero element
+                if(!start_row){//when the row has the first non zero element
                     ++row;
                     inner_indices[row]=count; //store the number of non zero elements before reaching this element
-                    flag=true;
+                    start_row=true;
                 }
                 ++count; //I count the non-zero elements
             }

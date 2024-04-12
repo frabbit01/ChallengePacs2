@@ -11,7 +11,7 @@ namespace algebra{
         public:
             void compress();
             void uncompress();
-            bool is_compressed const(){return compressed;};
+            bool is_compressed() const{return compressed;}
             //call operator:Missing
             //constructor
             Matrix()=default; //default constructor
@@ -19,23 +19,23 @@ namespace algebra{
             n_rows(_n_rows){
                 T default_t;
                 for(std::size_t i=0;i<n_rows;++i){
-                    for(std::size_t j=0;j<n_cols;++j){
+                    for(std::size_t j=0;j<_n_cols;++j){
                         std::array<std::size_t,2> key={i,j};
                         COOmap[key]=default_t;
                     }
                 }
-            }; 
+            } 
             //resize
         private:
             //CSR format
             unsigned n_rows; //Initialized in the constructor
             unsigned n_nnz; //I want to update this every time I use the call operator
-            std::vector<std:size_t> inner_indices; //I initialize this in the uncompress method; starting index for the element of each row
+            std::vector<std::size_t> inner_indices; //I initialize this in the uncompress method; starting index for the element of each row
             std::vector<std::size_t> outer_indices; //I initialize this in the uncompress method; corresponding column idxs
             std::vector<T> values; //I initialize this in the uncompress method; values vector
 
             //COOmap format
-            std::map<std::array<std::size t,2>,T> COOmap;
+            std::map<std::array<std::size_t,2>,T> COOmap;
 
             //check for format
             bool compressed;

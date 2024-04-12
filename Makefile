@@ -1,5 +1,5 @@
 CXX      ?= g++
-CXXFLAGS ?= -std=c++17
+CXXFLAGS ?= -std=c++20
 CPPFLAGS ?= -O3 -Wall -pedantic -I.
 LDLIBS   ?= 
 LINK.o := $(LINK.cc)
