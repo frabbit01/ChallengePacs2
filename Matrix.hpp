@@ -12,16 +12,27 @@ namespace algebra{
             void compress();
             void uncompress();
             bool is_compressed const(){return compressed;};
-            //call operator
+            //call operator:Missing
             //constructor
-
+            Matrix()=default; //default constructor
+            Matrix(std::size_t _n_rows,std::size_t _n_cols):  //constructor that takes size of the matrix as input
+            n_rows(_n_rows){
+                T default_t;
+                for(std::size_t i=0;i<n_rows;++i){
+                    for(std::size_t j=0;j<n_cols;++j){
+                        std::array<std::size_t,2> key={i,j};
+                        COOmap[key]=default_t;
+                    }
+                }
+            }; 
+            //resize
         private:
             //CSR format
-            unsigned n_rows; //controlla se togliere :number of rows
-            unsigned n_nnz; //controlla se togliere: number of non-zero elems
-            std::vector<std:size_t> inner_indices; //nel costruttore, costruirlo di size n_rows+1: starting index for the element of each row
-            std::vector<std::size_t> outer_indices; //nel costruttore, costruirlo di size n_nnz : corresponding column idxs
-            std::vector<T> values; //nel costruttore, costruirlo di length n_nnz: values vector
+            unsigned n_rows; //Initialized in the constructor
+            unsigned n_nnz; //I want to update this every time I use the call operator
+            std::vector<std:size_t> inner_indices; //I initialize this in the uncompress method; starting index for the element of each row
+            std::vector<std::size_t> outer_indices; //I initialize this in the uncompress method; corresponding column idxs
+            std::vector<T> values; //I initialize this in the uncompress method; values vector
 
             //COOmap format
             std::map<std::array<std::size t,2>,T> COOmap;
