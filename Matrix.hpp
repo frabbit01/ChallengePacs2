@@ -11,7 +11,7 @@ namespace algebra{
         public:
             void compress();
             void uncompress();
-            bool is_compressed const();
+            bool is_compressed const(){return compressed;};
             //call operator
             //constructor
 
@@ -34,5 +34,9 @@ namespace algebra{
 //friend operator
 
 //extras: matric*matrix, chrono utility
+
+//Implementation
+#include "Matrix_impl.hpp"
+
 
 #endif /*MATRIX_HPP*/
