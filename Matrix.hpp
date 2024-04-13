@@ -6,8 +6,9 @@
 #include<vector>
 
 namespace algebra{
-
-    template<typename T,typename StorageOrder> class Matrix{
+    //How to pass an enumerator??
+    enum class StorageOrder{Rows,Columns};
+    template<typename T,StorageOrder S> class Matrix{
         public:
             void compress();//Bisogna generalizzare per il caso in cui lo StorageOrder non sia per CSR
             void uncompress(); //Implementazione da finire!!!!

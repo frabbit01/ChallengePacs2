@@ -6,9 +6,9 @@
 #include<utility>
 
 namespace algebra{
-    template<typename T,typename StorageOrder>
+    template<typename T,StorageOrder S>
     void
-    Matrix<T,StorageOrder>::compress(){
+    Matrix<T,S>::compress(){
         if(compressed) //If the matrix is already compressed I exit the function
             return;
         inner_indices=std::vector<std::size_t>(n_rows+1);
@@ -34,9 +34,9 @@ namespace algebra{
         compressed=true;
     }
 
-    template<typename T,typename StorageOrder>
+    template<typename T,StorageOrder S>
     void
-    Matrix<T,StorageOrder>::uncompress(){
+    Matrix<T,S>::uncompress(){
         if(!compressed)
             return;
         for(std::size_t i=0;i<n_rows;++i){
