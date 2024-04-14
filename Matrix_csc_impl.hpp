@@ -1,5 +1,5 @@
-#ifndef MATRIX_IMPL_HPP
-#define MATRIX_IMPL_HPP
+#ifndef MATRIX_CSC_IMPL_HPP
+#define MATRIX_CSC_IMPL_HPP
 
 //implemenation of Matrix class methods 
 #include "Matrix.hpp"
@@ -8,9 +8,9 @@
 #include<algorithm>
 
 namespace algebra{
-    template<typename T,StorageOrder S>
+    template<typename T>
     void
-    Matrix<T,S>::resize(const unsigned & newrows, const unsigned &newcols){
+    Matrix<T,StorageOrder::Columns>::resize(const unsigned & newrows, const unsigned &newcols){
         if(newrows>n_rows||newcols>n_cols){
             std::cerr<<"The wished dimensions are bigger than the current ones"<<std::endl;
             return;
@@ -29,12 +29,12 @@ namespace algebra{
             }
         }
         else{
-            std::size_t diff=n_nnz-inner_indices[newrows+1]; //number of elements to erase
+            std::size_t diff=n_nnz-inner_indices[newcols+1]; //number of elements to erase
             auto last=outer_indices.end(); //I delete the outer indices corresponding to the non zero elements to erase
             auto first=last-diff;
             outer_indices.erase(first,last);
             auto last_i=inner_indices.end(); //I delete the inner indices corresponding to the deleted rows
-            auto first_i=last-(n_rows-newrows);
+            auto first_i=last-(n_cols-newcols);
             inner_indices.erase(first_i,last_i);
             n_nnz-=diff; //new number of nonzero elements
         }
@@ -43,27 +43,27 @@ namespace algebra{
         n_cols=newcols;
     }
 
-    template<typename T,StorageOrder S>
+    template<typename T>
     void
-    Matrix<T,S>::compress(){
+    Matrix<T,StorageOrder::Columns>::compress(){
         if(compressed) //If the matrix is already compressed I exit the function
             return;
-        inner_indices=std::vector<std::size_t>(n_rows+1);
+        inner_indices=std::vector<std::size_t>(n_cols+1);
         outer_indices=std::vector<std::size_t>(n_nnz);
         values=std::vector<T>(n_nnz);
-        std::size_t count=0,i=0,row=0;
-        bool start_row=false;//flag to check when the first non null element of a row is
+        std::size_t count=0,i=0,col=0;
+        bool start_col=false;//flag to check when the first non null element of a row is
         for(auto iter=COOmap.cbegin();iter!=COOmap.cend();++iter){
-            if(iter->first[0]!=row) //I reset the flag when I go to the next row in the matrix
-                start_row=false; 
+            if(iter->first[0]!=col) //I reset the flag when I go to the next row in the matrix
+                start_col=false; 
             if(iter->second!=0){
                 values[i]=iter->second;//store nnz value
-                outer_indices=iter->first[1];//store column index
+                outer_indices[i]=iter->first[1];//store row index
                 ++i;
-                if(!start_row){//when the row has the first non zero element
-                    ++row;
-                    inner_indices[row]=count; //store the number of non zero elements before reaching this element
-                    start_row=true;
+                if(!start_col){//when the col has the first non zero element
+                    ++col;
+                    inner_indices[col]=count; //store the number of non zero elements before reaching this element
+                    start_col=true;
                 }
                 ++count; //I count the non-zero elements
             }
@@ -72,18 +72,18 @@ namespace algebra{
         compressed=true;
     }
 
-    template<typename T,StorageOrder S>
+    template<typename T>
     void
-    Matrix<T,S>::uncompress(){
+    Matrix<T,StorageOrder::Columns>::uncompress(){
         T default_t;
         if(!compressed) //If already uncompressed I exit
             return;
-        for(std::size_t i=0;i<n_rows;++i){
+        for(std::size_t i=0;i<n_cols;++i){
             unsigned n1=outer_indices[i+1],n2=n_nnz, k=n1;
-            if(i<n_rows-1)
+            if(i<n_cols-1)
                 n2=outer_indices[i+2];
-            for(size_t j=0;j<n_cols;++j){ //I know n_cols will have to have been initialized either in the call operator (non const) or in the default constructor, since I cannot add elements in the compressed state
-                std::array<std::size_t,2> key={i,j};
+            for(size_t j=0;j<n_rows;++j){ //I know n_cols will have to have been initialized either in the call operator (non const) or in the default constructor, since I cannot add elements in the compressed state
+                std::array<std::size_t,2> key={j,i};
                 if(j!=outer_indices[k]){ //If null element insert 0 value
                     auto v=std::make_pair<std::array<std::size_t,2>,T> (key,default_t);
                     COOmap.insert(v);
@@ -101,9 +101,9 @@ namespace algebra{
         outer_indices.clear();
         inner_indices.clear();
     }
-    template<typename T,StorageOrder S>
+    template<typename T>
     const T & 
-    Matrix<T,S>::operator() (const std::size_t & i, const std::size_t &j) const{
+    Matrix<T,StorageOrder::Columns>::operator() (const std::size_t & i, const std::size_t &j) const{
         T default_t;
         if(i>=n_rows||j>=n_cols){ //I check if I am within the matrix dimensions
             std::cerr<<"out of bounds"<<std::endl; 
@@ -114,11 +114,11 @@ namespace algebra{
             return COOmap[key];
         }
 
-        unsigned n1=inner_indices[i+1],n2=n_nnz;
-        if(i<n_rows-1)
-            n2=inner_indices[i+2];
+        unsigned n1=inner_indices[j+1],n2=n_nnz;
+        if(j<n_cols-1)
+            n2=inner_indices[j+2];
         for(std::size_t k=n1;k<=n2;++k){//I am cycling through the non null elements of the row
-            if(outer_indices[k]==j)
+            if(outer_indices[k]==i)
                 return values[k]; //If the element is non null I return it
         }
         return default_t; //If the element is null I return the default value
@@ -178,4 +178,4 @@ namespace algebra{
 
 
 
-#endif /*MATRIX_IMPL_HPP*/
+#endif /*MATRIX_CSC_IMPL_HPP*/
