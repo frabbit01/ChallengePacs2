@@ -18,9 +18,9 @@ namespace algebra{
             void uncompress(); //da fare per il caso csc 
             bool is_compressed() const{return compressed;}
             //call operator non const:Missing
-            T & operator() (const std::size_t & i, const std::size_t &j) const; //va generalizzato per il caso CSC nell'ultima parte
-            T & operator() (const std::size_t & i, const std::size_t &j);
-            //overloading less than: missing
+            const T & operator() (const std::size_t & i, const std::size_t &j) const; //va generalizzato per il caso CSC nell'ultima parte
+            T & operator() (const std::size_t & _i, const std::size_t &_j); //va generalizzato per il caso CSC se compresso
+            //overloading less than: missing for csc
             //constructor
             Matrix()=default; //default constructor
             //It is not necessary to specialize this constructor, for the CSC it is necessary to implement a new comparison operator

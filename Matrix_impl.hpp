@@ -5,6 +5,7 @@
 #include "Matrix.hpp"
 #include<utility>
 #include<limits>
+#include<algorithm>
 
 namespace algebra{
     template<typename T,StorageOrder S>
@@ -100,7 +101,7 @@ namespace algebra{
         inner_indices.clear();
     }
     template<typename T,StorageOrder S>
-    T & 
+    const T & 
     Matrix<T,S>::operator() (const std::size_t & i, const std::size_t &j) const{
         T default_t;
         if(i>=n_rows||j>=n_cols){ //I check if I am within the matrix dimensions
@@ -120,6 +121,57 @@ namespace algebra{
                 return values[k]; //If the element is non null I return it
         }
         return default_t; //If the element is null I return the default value
+    }
+
+    template<typename T,StorageOrder S>
+    T & 
+    Matrix<T,S>::operator() (const std::size_t & _i, const std::size_t &_j) {
+        T default_t;
+        if(compressed &&(_i>=n_rows||_j>=n_cols)){ //If the user tries to add a new element when the matrix is in a compressed state, return an error
+            std::cerr<<"You cannot add new elements when the matrix is in a compressed state"<<std::endl;
+            return std::numeric_limits<T>::quiet_Nan();
+        }
+        if(compressed){
+            unsigned n1=inner_indices[_i+1],n2=n_nnz;
+            if(_i<n_rows-1)
+                n2=inner_indices[_i+2];
+            for(std::size_t k=n1;k<=n2;++k){//I am cycling through the non null elements of the row
+                if(outer_indices[k]==_j)
+                    return values[k]; //If the element is non null I return it
+            }
+            return default_t; //If I get a zero element return a default value for T
+        }
+        if(_i<n_rows&&_j<n_cols){
+            std::array<std::size_t,2> key;
+            return COOmap[key];
+        }
+        //if the element is not within bounds I have to adjust the matrix dimensions
+        std::size_t g=0;
+        auto n_rows_to_add=std::max((_i+1)-n_rows,g), n_cols_to_add=std::max(_j+1-n_cols,g);
+        unsigned counter=0; //I keep track of how many null elements I am inserting to fix the matrix dimensions
+        //I insert a default value for T to make the matrix have enough rows and columns to be rectangular after inserting the new element
+        if(n_cols_to_add>0){
+            for(std::size_t i=0;i<n_rows;++i){
+                for(std::size_t j=n_cols-1;j<n_cols+n_cols_to_add;++j){
+                    COOmap[{i,j}]=default_t; 
+                    ++counter;
+                }
+            }
+        }
+        if(n_rows_to_add>0){
+            for(std::size_t i=n_rows-1;i<n_rows+n_rows_to_add;++i){
+                for(std::size_t j=0;j<n_cols+n_cols_to_add;++j){
+                    COOmap[{i,j}]=default_t;
+                    ++counter;
+                }
+            }
+        }
+        //i fix the matrix dimensions
+        n_rows+=n_rows_to_add;
+        n_cols+=n_cols_to_add;
+        n_nnz+=counter;
+
+        return COOmap[{_i,_j}]; //I return a reference to the new element
     }
 };
 
