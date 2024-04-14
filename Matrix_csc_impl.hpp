@@ -22,7 +22,7 @@ namespace algebra{
                         std::array<std::size_t,2> key={i,j};
                         T default_t;
                         if(COOmap[key]!=default_t)
-                            --n_nnz; //If the element is not of the default value I decrease the numner of non zero elements
+                            --n_nnz; //If the element is not of the default value I decrease the number of non zero elements
                         COOmap.erase(key); //I erase the elements out of range for the new dimensions
                     }
                 }
@@ -124,20 +124,20 @@ namespace algebra{
         return default_t; //If the element is null I return the default value
     }
 
-    template<typename T,StorageOrder S>
+    template<typename T>
     T & 
-    Matrix<T,S>::operator() (const std::size_t & _i, const std::size_t &_j) {
+    Matrix<T,StorageOrder::Columns>::operator() (const std::size_t & _i, const std::size_t &_j) {
         T default_t;
         if(compressed &&(_i>=n_rows||_j>=n_cols)){ //If the user tries to add a new element when the matrix is in a compressed state, return an error
             std::cerr<<"You cannot add new elements when the matrix is in a compressed state"<<std::endl;
             return std::numeric_limits<T>::quiet_Nan();
         }
         if(compressed){
-            unsigned n1=inner_indices[_i+1],n2=n_nnz;
-            if(_i<n_rows-1)
-                n2=inner_indices[_i+2];
+            unsigned n1=inner_indices[_j+1],n2=n_nnz;
+            if(_j<n_cols-1)
+                n2=inner_indices[_j+2];
             for(std::size_t k=n1;k<=n2;++k){//I am cycling through the non null elements of the row
-                if(outer_indices[k]==_j)
+                if(outer_indices[k]==_i)
                     return values[k]; //If the element is non null I return it
             }
             return default_t; //If I get a zero element return a default value for T
