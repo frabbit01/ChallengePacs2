@@ -174,6 +174,7 @@ namespace algebra{
 
         return COOmap[{_i,_j}]; //I return a reference to the new element
     }
+    
 };
 
 

@@ -14,13 +14,12 @@ namespace algebra{
             unsigned columns() const {return n_cols;}
             unsigned nnz() const {return n_nnz;}
             //other methods
-            void compress();//Bisogna generalizzare per il caso in cui lo StorageOrder non sia per CSR
+            void compress();
             void uncompress(); 
             bool is_compressed() const{return compressed;}
             //call operator 
-            const T & operator() (const std::size_t & i, const std::size_t &j) const; //va generalizzato per il caso CSC nell'ultima parte
-            T & operator() (const std::size_t & _i, const std::size_t &_j); //va generalizzato per il caso CSC se compresso
-            //overloading less than: missing for csc
+            const T & operator() (const std::size_t & i, const std::size_t &j) const; 
+            T & operator() (const std::size_t & _i, const std::size_t &_j); 
             //constructor
             Matrix()=default; //default constructor
             //It is not necessary to specialize this constructor, for the CSC it is necessary to implement a new comparison operator
@@ -33,7 +32,6 @@ namespace algebra{
                         COOmap[key]=default_t;
                     }
                 }
-                n_nnz=_n_rows*_n_cols;
             } 
             //resize
             void resize(const unsigned & newrows, const unsigned &newcols); //check if it means to also get it bigger, implement if so is the case
@@ -62,13 +60,14 @@ namespace algebra{
             unsigned columns() const {return n_cols;}
             unsigned nnz() const {return n_nnz;}
             //other methods
-            void compress();//Bisogna generalizzare per il caso in cui lo StorageOrder non sia per CSR
+            void compress();
             void uncompress(); 
             bool is_compressed() const{return compressed;}
             //call operator 
             const T & operator() (const std::size_t & i, const std::size_t &j) const;
             T & operator() (const std::size_t & _i, const std::size_t &_j); 
-            //overloading less than: missing for csc
+            //overloading less than:   missing!!
+            
             //constructor
             Matrix()=default; //default constructor
             //It is not necessary to specialize this constructor, for the CSC it is necessary to implement a new comparison operator
@@ -81,7 +80,6 @@ namespace algebra{
                         COOmap[key]=default_t;
                     }
                 }
-                n_nnz=_n_rows*_n_cols;
             } 
             //resize
             void resize(const unsigned & newrows, const unsigned &newcols); //check if it means to also get it bigger, implement if so is the case
@@ -107,7 +105,7 @@ namespace algebra{
 //extras: matric*matrix, chrono utility
 
 //Implementation
-#include "Matrix_impl.hpp"
-#include "Matrix_csc_impl.hpp"
+#include "Matrix_impl.hpp" //for StorageOrder::Rows
+#include "Matrix_csc_impl.hpp" //for StorageOrder::Columns
 
 #endif /*MATRIX_HPP*/
