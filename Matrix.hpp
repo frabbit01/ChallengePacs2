@@ -53,6 +53,16 @@ namespace algebra{
 
     ///////////////////////////////////////////////////////////////////////////////
     //class specialization for CSC format
+    //I define a new function to compare the keys, it will be given as a parameter of the map private member
+    bool CompareKeysCSC(const std::array<std::size_t,2> & lhs, const std::array<std::size_t,2> &rhs){
+        if(lhs[1]<rhs[1])
+            return true;
+        if(lhs[1]==rhs[1]&&lhs[0]<rhs[0])
+            return true;
+        return false;
+    }
+    
+
     template<typename T> class Matrix<T,StorageOrder::Columns>{
         public:
             //getters
@@ -66,7 +76,6 @@ namespace algebra{
             //call operator 
             const T & operator() (const std::size_t & i, const std::size_t &j) const;
             T & operator() (const std::size_t & _i, const std::size_t &_j); 
-            //overloading less than:   missing!!
             
             //constructor
             Matrix()=default; //default constructor
@@ -93,7 +102,7 @@ namespace algebra{
             std::vector<T> values; //I initialize this in the uncompress method; values vector
 
             //COOmap format
-            std::map<std::array<std::size_t,2>,T> COOmap;
+            std::map<std::array<std::size_t,2>,T,decltype(CompareKeysCSC)*> COOmap;
 
             //check for format
             bool compressed;
