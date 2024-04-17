@@ -178,16 +178,16 @@ namespace algebra{
     template<typename T>
     std::vector<T> 
     operator*(Matrix<T,StorageOrder::Rows> & M, std::vector<T> &v){
-        if(M.columns!=v.size()){ //dimensions check
+        if(M.n_cols!=v.size()){ //dimensions check
                 std::cerr<<"incompatible dimensions for matrix vector multiplication"<<std::endl;
                 return {};
             }
         std::vector<T> res(v.size());
-        if(M.is_compressed()){
+        if(M.compressed){
             for(std::size_t i=0;i<M.n_rows;++i){
                 std::size_t n_elems=M.inner_indices[i+1], old_n_elems=M.inner_indices[i];
                 for(std::size_t k=old_n_elems-1;k<n_elems;++k){
-                    res[i]+=M.outer_indices[k]*v[k-old_n_elems+1];
+                    res[i]+=M.values[k]*v[M.outer_indices[k-old_n_elems+1]];
                 }
             }
         }

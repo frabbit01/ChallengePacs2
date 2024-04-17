@@ -174,6 +174,29 @@ namespace algebra{
 
         return COOmap[{_i,_j}]; //I return a reference to the new element
     }
+
+    template<typename T>
+    std::vector<T> 
+    operator*(Matrix<T,StorageOrder::Columns> & M, std::vector<T> &v){
+        if(M.n_cols!=v.size()){ //dimensions check
+                std::cerr<<"incompatible dimensions for matrix vector multiplication"<<std::endl;
+                return {};
+            }
+        std::vector<T> res(v.size());
+        if(M.compressed){
+            for(std::size_t k=0;k<M.n_nnz;++k){
+                res[M.outer_indices[k]]=v[M.outer_indices[k]]*M.values[k];
+            }
+        }
+        else{
+            for(std::size_t i=0;i<M.n_rows;++i){
+                for(std::size_t j=0;j<M.n_cols;++j){
+                    res[i]+=M(i,j)*v[j];
+                }
+            }
+        }
+        return res;
+    }
     
 };
 
