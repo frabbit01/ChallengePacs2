@@ -35,6 +35,8 @@ namespace algebra{
             } 
             //resize
             void resize(const unsigned & newrows, const unsigned &newcols); //check if it means to also get it bigger, implement if so is the case
+
+            //matrix reader!!
         private:
             //Compressed format
             unsigned n_rows; //Initialized in the constructor (non default)
@@ -92,6 +94,8 @@ namespace algebra{
             } 
             //resize
             void resize(const unsigned & newrows, const unsigned &newcols); //check if it means to also get it bigger, implement if so is the case
+
+            //matrix reader!
         private:
             //Compressed format
             unsigned n_rows; //Initialized in the constructor (non default)
@@ -111,7 +115,7 @@ namespace algebra{
 
 //friend operator
 
-//extras: matric*matrix, chrono utility
+//extras: matric*matrix, chrono utility, norms
 
 //Implementation
 #include "Matrix_impl.hpp" //for StorageOrder::Rows
