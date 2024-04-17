@@ -37,6 +37,10 @@ namespace algebra{
             void resize(const unsigned & newrows, const unsigned &newcols); //check if it means to also get it bigger, implement if so is the case
 
             //matrix reader!!
+
+            //Matrix* vector
+            template<typename U>
+            friend std::vector<U> operator * (Matrix<U,StorageOrder::Rows> & M, std::vector<U> &v);
         private:
             //Compressed format
             unsigned n_rows; //Initialized in the constructor (non default)
@@ -96,6 +100,10 @@ namespace algebra{
             void resize(const unsigned & newrows, const unsigned &newcols); //check if it means to also get it bigger, implement if so is the case
 
             //matrix reader!
+
+            //matrix*vector
+            template<typename U>
+            friend std::vector<U> operator * (Matrix<U,StorageOrder::Columns> & M, std::vector<U> &v);
         private:
             //Compressed format
             unsigned n_rows; //Initialized in the constructor (non default)
