@@ -184,7 +184,7 @@ namespace algebra{
             }
         std::vector<T> res(v.size());
         if(M.is_compressed()){
-            for(std::size_t i=0;i<nrows;++i){
+            for(std::size_t i=0;i<M.n_rows;++i){
                 std::size_t n_elems=M.inner_indices[i+1], old_n_elems=M.inner_indices[i];
                 for(std::size_t k=old_n_elems-1;k<n_elems;++k){
                     res[i]+=M.outer_indices[k]*v[k-old_n_elems+1];

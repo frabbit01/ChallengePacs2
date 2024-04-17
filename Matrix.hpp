@@ -103,7 +103,7 @@ namespace algebra{
 
             //matrix*vector
             template<typename U>
-            friend std::vector<U> operator * (Matrix<U,StorageOrder::Columns> & M, std::vector<U> &v);
+            friend std::vector<U> operator * (Matrix<U,StorageOrder::Columns> & M, std::vector<U> &v); //da implementare
         private:
             //Compressed format
             unsigned n_rows; //Initialized in the constructor (non default)
