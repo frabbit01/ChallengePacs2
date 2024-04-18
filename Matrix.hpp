@@ -4,7 +4,7 @@
 #include<iostream>
 #include<map>
 #include<vector>
-
+#include "mmio.h" //I included the library that is published on the mnist site, of which the link was attached in the given pdf file
 namespace algebra{
     enum class StorageOrder{Rows,Columns};
     template<typename T,StorageOrder S=StorageOrder::Rows> class Matrix{
@@ -37,7 +37,7 @@ namespace algebra{
             void resize(const unsigned & newrows, const unsigned &newcols); //check if it means to also get it bigger, implement if so is the case
 
             //matrix reader!!
-
+            Matrix<T,S> read_market_matrix(const char * filename); //DA implementare
             //Matrix* vector
             template<typename U>
             friend std::vector<U> operator * (Matrix<U,StorageOrder::Rows> & M, std::vector<U> &v);
@@ -120,8 +120,6 @@ namespace algebra{
             bool compressed;
     };
 }; //namespace algebra
-
-//friend operator
 
 //extras: matric*matrix, chrono utility, norms
 
