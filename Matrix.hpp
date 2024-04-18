@@ -4,6 +4,7 @@
 #include<iostream>
 #include<map>
 #include<vector>
+#include<cmath>
 #include "mmio.h" //I included the library that is published on the mnist site, of which the link was attached in the given pdf file
 namespace algebra{
     enum class StorageOrder{Rows,Columns};

@@ -130,7 +130,8 @@ namespace algebra{
         T default_t;
         if(compressed &&(_i>=n_rows||_j>=n_cols)){ //If the user tries to add a new element when the matrix is in a compressed state, return an error
             std::cerr<<"You cannot add new elements when the matrix is in a compressed state"<<std::endl;
-            return std::numeric_limits<T>::quiet_Nan();
+            //return std::numeric_limits<T>::quiet_Nan();
+            return default_t;
         }
         if(compressed){
             unsigned n1=inner_indices[_j+1],n2=n_nnz;
@@ -232,7 +233,7 @@ namespace algebra{
         for(std::size_t k=0;k<nnz;++k){
             std::size_t i,j;
             T value;
-            fscanf(f,"%d %d %lg\n",&i,&j,&value);
+            fscanf(f,"%ld %ld %lg\n",&i,&j,&value);
             result(i-1,j-1)=value; //It has to be considered that now the indices have to start from 0
         }
         //I close the file
