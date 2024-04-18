@@ -206,7 +206,7 @@ namespace algebra{
         int return_code;
         MM_typecode matcode;
         FILE *f;
-        unsigned rows,cols,nnz;
+        int rows,cols,nnz;
         f=std::fopen(filename,"r");
         if(!f){ //check if the file has opened correctly
             std::cerr<<"file opening has failed"<<std::endl;
