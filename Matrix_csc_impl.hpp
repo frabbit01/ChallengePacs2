@@ -184,11 +184,15 @@ namespace algebra{
             }
         std::vector<T> res(v.size());
         if(M.compressed){
-            for(std::size_t k=0;k<M.n_nnz;++k){
-                res[M.outer_indices[k]]=v[M.outer_indices[k]]*M.values[k];
+            for(std::size_t j=0;j<M.n_cols;++j){
+                std::size_t n_elems=M.inner_indices[j+1], old_n_elems=M.inner_indices[j];
+                for(std::size_t k=old_n_elems-1;k<n_elems;++k){
+                    res[M.outer_indices[k-old_n_elems+1]]+=M.values[k]*v[j];
+                }
             }
+            
         }
-        else{
+        else{ //uncompressed case
             for(std::size_t i=0;i<M.n_rows;++i){
                 for(std::size_t j=0;j<M.n_cols;++j){
                     res[i]+=M(i,j)*v[j];
