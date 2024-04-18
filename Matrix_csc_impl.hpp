@@ -201,6 +201,45 @@ namespace algebra{
         }
         return res;
     }
+    //Since the matrix returned is in an uncompressed state, the code is almost identical to its counterpart for matrices stored row-wise
+    template<typename T>
+    Matrix<T,StorageOrder::Columns> 
+    Matrix<T,StorageOrder::Columns>::read_market_matrix(const char * filename){
+        int return_code;
+        MM_typecode matcode;
+        FILE *f;
+        unsigned rows,cols,nnz;
+        f=std::fopen(filename,"r");
+        if(!f){ //check if the file has opened correctly
+            std::cerr<<"file opening has failed"<<std::endl;
+            return Matrix<T,StorageOrder::Rows>();
+        }
+        if(mm_read_banner(f,&matcode)!=0){ //check if the banner has been successfully read
+            std::cerr<<"Matrix banner was not read successfully"<<std::endl;
+            return Matrix<T,StorageOrder::Rows>();
+        }
+        if(!mm_is_matrix(matcode)||!mm_is_real(matcode)){//check if the matrix is a general real matrix
+            std::cerr<<"This program only works with general real matrices"<<std::endl;
+            return Matrix<T,StorageOrder::Rows>();
+        }
+        if(mm_read_mtx_crd_size(f,&rows,&cols,&nnz)!=0){ //check if the dimensions have been all read correctly
+            std::cerr<<"The sizes were not read correctly"<<std::endl;
+            return Matrix<T,StorageOrder::Rows>();
+        }
+        //I call the constructor
+        Matrix<T,StorageOrder::Rows> result(rows,cols);
+        //I insert the non zero values in the matrix
+        for(std::size_t k=0;k<nnz;++k){
+            std::size_t i,j;
+            T value;
+            fscanf(f,"%d %d %lg\n",&i,&j,&value);
+            result(i-1,j-1)=value; //It has to be considered that now the indices have to start from 0
+        }
+        //I close the file
+        if(f!=stdin)
+            fclose(f);
+        return result;
+    }
     
 };
 

@@ -36,8 +36,8 @@ namespace algebra{
             //resize
             void resize(const unsigned & newrows, const unsigned &newcols); //check if it means to also get it bigger, implement if so is the case
 
-            //matrix reader!!
-            Matrix<T,S> read_market_matrix(const char * filename); //DA implementare
+            //matrix reader: the returned matrix will be in an uncompressed state
+            Matrix<T,StorageOrder::Rows> read_market_matrix(const char * filename); 
             //Matrix* vector
             template<typename U>
             friend std::vector<U> operator * (Matrix<U,StorageOrder::Rows> & M, std::vector<U> &v);
@@ -100,7 +100,7 @@ namespace algebra{
             void resize(const unsigned & newrows, const unsigned &newcols); //check if it means to also get it bigger, implement if so is the case
 
             //matrix reader!
-
+            Matrix<T,StorageOrder::Columns> read_market_matrix(const char * filename);
             //matrix*vector
             template<typename U>
             friend std::vector<U> operator * (Matrix<U,StorageOrder::Columns> & M, std::vector<U> &v); //da implementare
