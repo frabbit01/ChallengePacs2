@@ -1,7 +1,7 @@
 #ifndef MATRIX_CSC_IMPL_HPP
 #define MATRIX_CSC_IMPL_HPP
 
-//implemenation of Matrix class methods 
+//implemenation of specialization of Matrix class methods 
 #include "Matrix.hpp"
 #include<utility>
 #include<limits>
