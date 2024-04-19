@@ -21,8 +21,8 @@ namespace algebra{
                     if(i>=newrows||j>=newcols){
                         std::array<std::size_t,2> key={i,j};
                         T default_t;
-                        if(COOmap[key]!=default_t)
-                            --n_nnz; //If the element is not of the default value I decrease the numner of non zero elements
+                        if(COOmap[key]!=0)
+                            ++n_nnz; //If the element is not of the default value I increase the number of non zero elements
                         COOmap.erase(key); //I erase the elements out of range for the new dimensions
                     }
                 }
@@ -144,19 +144,17 @@ namespace algebra{
             return default_t; //If I get a zero element return a default value for T
         }
         if(_i<n_rows&&_j<n_cols){
-            std::array<std::size_t,2> key;
+            std::array<std::size_t,2> key={_i,_j};
             return COOmap[key];
         }
         //if the element is not within bounds I have to adjust the matrix dimensions
         std::size_t g=0;
         auto n_rows_to_add=std::max((_i+1)-n_rows,g), n_cols_to_add=std::max(_j+1-n_cols,g);
-        unsigned counter=0; //I keep track of how many null elements I am inserting to fix the matrix dimensions
         //I insert a default value for T to make the matrix have enough rows and columns to be rectangular after inserting the new element
         if(n_cols_to_add>0){
             for(std::size_t i=0;i<n_rows;++i){
                 for(std::size_t j=n_cols-1;j<n_cols+n_cols_to_add;++j){
                     COOmap[{i,j}]=default_t; 
-                    ++counter;
                 }
             }
         }
@@ -164,14 +162,13 @@ namespace algebra{
             for(std::size_t i=n_rows-1;i<n_rows+n_rows_to_add;++i){
                 for(std::size_t j=0;j<n_cols+n_cols_to_add;++j){
                     COOmap[{i,j}]=default_t;
-                    ++counter;
                 }
             }
         }
         //i fix the matrix dimensions
         n_rows+=n_rows_to_add;
         n_cols+=n_cols_to_add;
-        n_nnz+=counter;
+        //++n_nnz;
 
         return COOmap[{_i,_j}]; //I return a reference to the new element
     }
