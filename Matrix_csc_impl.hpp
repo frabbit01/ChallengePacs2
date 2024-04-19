@@ -201,29 +201,28 @@ namespace algebra{
     template<typename T>
     Matrix<T,StorageOrder::Columns> 
     Matrix<T,StorageOrder::Columns>::read_market_matrix(const char * filename){
-        int return_code;
         MM_typecode matcode;
         FILE *f;
         int rows,cols,nnz;
         f=std::fopen(filename,"r");
         if(!f){ //check if the file has opened correctly
             std::cerr<<"file opening has failed"<<std::endl;
-            return Matrix<T,StorageOrder::Rows>();
+            return Matrix<T,StorageOrder::Columns>();
         }
         if(mm_read_banner(f,&matcode)!=0){ //check if the banner has been successfully read
             std::cerr<<"Matrix banner was not read successfully"<<std::endl;
-            return Matrix<T,StorageOrder::Rows>();
+            return Matrix<T,StorageOrder::Columns>();
         }
         if(!mm_is_matrix(matcode)||!mm_is_real(matcode)){//check if the matrix is a general real matrix
             std::cerr<<"This program only works with general real matrices"<<std::endl;
-            return Matrix<T,StorageOrder::Rows>();
+            return Matrix<T,StorageOrder::Columns>();
         }
         if(mm_read_mtx_crd_size(f,&rows,&cols,&nnz)!=0){ //check if the dimensions have been all read correctly
             std::cerr<<"The sizes were not read correctly"<<std::endl;
-            return Matrix<T,StorageOrder::Rows>();
+            return Matrix<T,StorageOrder::Columns>();
         }
         //I call the constructor
-        Matrix<T,StorageOrder::Rows> result(rows,cols);
+        Matrix<T,StorageOrder::Columns> result(rows,cols);
         result.set_nnz(nnz);
         //I insert the non zero values in the matrix
         for(std::size_t k=0;k<nnz;++k){
