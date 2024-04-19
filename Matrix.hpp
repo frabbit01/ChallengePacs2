@@ -81,7 +81,7 @@ namespace algebra{
             unsigned columns() const {return n_cols;}
             unsigned nnz() const {return n_nnz;}
             //setter
-            void set_nnz(unsigned n){n_nnz=n;}
+            void set_nnz(unsigned n){n_nnz=n;} //The only problem with this is that I have to call this manually, since I do not know whether the value after insertion is 0 or not
             //other methods
             void compress();
             void uncompress(); 
