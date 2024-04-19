@@ -16,6 +16,8 @@ namespace algebra{
             unsigned rows() const {return n_rows;}
             unsigned columns() const {return n_cols;}
             unsigned nnz() const {return n_nnz;}
+            //setter
+            void set_nnz(unsigned n){n_nnz=n;}
             //other methods
             void compress();
             void uncompress(); 
@@ -48,7 +50,7 @@ namespace algebra{
             //Compressed format
             unsigned n_rows; //Initialized in the constructor (non default)
             unsigned n_cols; //Initialized in the constructor (non default)
-            unsigned n_nnz; //I want to update this every time I use the call operator or resize the matrix in any way
+            unsigned n_nnz=0; //I want to update this every time I use the call operator or resize the matrix in any way
             std::vector<std::size_t> inner_indices; //I initialize this in the uncompress method; starting index for the element of each row
             std::vector<std::size_t> outer_indices; //I initialize this in the uncompress method; corresponding column idxs
             std::vector<T> values; //I initialize this in the uncompress method; values vector
@@ -78,6 +80,8 @@ namespace algebra{
             unsigned rows() const {return n_rows;}
             unsigned columns() const {return n_cols;}
             unsigned nnz() const {return n_nnz;}
+            //setter
+            void set_nnz(unsigned n){n_nnz=n;}
             //other methods
             void compress();
             void uncompress(); 

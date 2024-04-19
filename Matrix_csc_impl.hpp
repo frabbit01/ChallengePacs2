@@ -21,7 +21,7 @@ namespace algebra{
                     if(i>=newrows||j>=newcols){
                         std::array<std::size_t,2> key={i,j};
                         T default_t;
-                        if(COOmap[key]!=default_t)
+                        if(COOmap[key]!=0)
                             ++n_nnz; //If the element is not of the default value I increase the number of non zero elements
                         COOmap.erase(key); //I erase the elements out of range for the new dimensions
                     }
@@ -168,8 +168,6 @@ namespace algebra{
         //i fix the matrix dimensions
         n_rows+=n_rows_to_add;
         n_cols+=n_cols_to_add;
-        ++n_nnz; //????
-
         return COOmap[{_i,_j}]; //I return a reference to the new element
     }
 
@@ -226,6 +224,7 @@ namespace algebra{
         }
         //I call the constructor
         Matrix<T,StorageOrder::Rows> result(rows,cols);
+        result.set_nnz(nnz);
         //I insert the non zero values in the matrix
         for(std::size_t k=0;k<nnz;++k){
             std::size_t i,j;
