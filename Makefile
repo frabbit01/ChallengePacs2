@@ -5,8 +5,8 @@ LDLIBS   ?=
 LINK.o := $(LINK.cc)
 
 EXEC = main
-SRCS = $(wildcard *.cpp)
-OBJS = $(SRCS:.cpp=.o)
+SRCS = $(wildcard *.cpp) 
+OBJS = $(SRCS:.cpp=.o) 
 
 DEPEND = make.dep
 

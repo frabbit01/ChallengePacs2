@@ -5,7 +5,7 @@
 #include<map>
 #include<vector>
 #include<cmath>
-#include "mmio.h" //I included the library that is published on the mnist site, of which the link was attached in the given pdf file
+#include "mmio.hpp" //I included the library that is published on the mnist site, of which the link was attached in the given pdf file
 namespace algebra{
     enum class StorageOrder{Rows,Columns};
     template<typename T,StorageOrder S=StorageOrder::Rows> class Matrix{
