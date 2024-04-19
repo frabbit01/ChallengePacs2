@@ -222,7 +222,7 @@ namespace algebra{
             return Matrix<T,StorageOrder::Columns>();
         }
         //I call the constructor
-        Matrix<T,StorageOrder::Columns> result(rows,cols);
+        Matrix<T,StorageOrder::Columns> result(rows,cols); //the program crashes here: constructor!
         result.set_nnz(nnz);
         //I insert the non zero values in the matrix
         for(std::size_t k=0;k<nnz;++k){

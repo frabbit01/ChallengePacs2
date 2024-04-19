@@ -64,14 +64,17 @@ namespace algebra{
 
     ///////////////////////////////////////////////////////////////////////////////
     //class specialization for CSC format
-    //I define a new function to compare the keys, it will be given as a parameter of the map private member
-    bool CompareKeysCSC(const std::array<std::size_t,2> & lhs, const std::array<std::size_t,2> &rhs){
-        if(lhs[1]<rhs[1])
-            return true;
-        if(lhs[1]==rhs[1]&&lhs[0]<rhs[0])
-            return true;
-        return false;
-    }
+
+    //I define a comparator to give as parameter for the private member COOmap for the matrix to be column ordered
+    struct CompareKeysCSC {
+        bool operator()(const std::array<std::size_t, 2>& lhs, const std::array<std::size_t, 2>& rhs) const {
+            if (lhs[1] < rhs[1])
+                return true;
+            if (lhs[1] == rhs[1] && lhs[0] < rhs[0])
+                return true;
+            return false;
+        }
+    };
     
 
     template<typename T> class Matrix<T,StorageOrder::Columns>{
@@ -121,8 +124,8 @@ namespace algebra{
             std::vector<T> values; //I initialize this in the uncompress method; values vector
 
             //COOmap format
-            std::map<std::array<std::size_t,2>,T,decltype(CompareKeysCSC)*> COOmap;
-
+            //std::map<std::array<std::size_t,2>,T,decltype(CompareKeysCSC)*> COOmap;
+            std::map<std::array<std::size_t,2>,T,CompareKeysCSC> COOmap;
             //check for format
             bool compressed;
     };

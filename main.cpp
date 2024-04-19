@@ -13,8 +13,7 @@ int main(){
 
     //here I test the same for a column order matrix
     Matrix<double,StorageOrder::Columns> matrix_columns; 
-    matrix_columns=matrix_columns.read_market_matrix(filename); //the reader goes into segmentation fault
-    std::cout<<"reader ok"<<std::endl;
+    matrix_columns=matrix_columns.read_market_matrix(filename); 
     std::cout<<matrix(43,34)<<std::endl; //here I check that the values and dimensions are correct
     std::cout<<"rows: "<<matrix.rows()<<"\n columns: "<<matrix.columns()<<"\nnon-zero elems: "<<matrix.nnz()<<std::endl;
     return 0;
