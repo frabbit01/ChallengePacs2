@@ -53,12 +53,13 @@ namespace algebra{
         values=std::vector<T>(n_nnz);
         std::size_t count=0,i=0,row=0;
         bool start_row=false;//flag to check when the first non null element of a row is
-        for(auto iter=COOmap.cbegin();iter!=COOmap.cend();++iter){
+        for(auto iter=COOmap.begin();iter!=COOmap.end();++iter){
+            //std::cout<<"iterazione: "<<check<<std::endl;
             if(iter->first[0]!=row) //I reset the flag when I go to the next row in the matrix
                 start_row=false; 
             if(iter->second!=0){
                 values[i]=iter->second;//store nnz value
-                outer_indices=iter->first[1];//store column index
+                outer_indices[i]=iter->first[1];//store column index
                 ++i;
                 if(!start_row){//when the row has the first non zero element
                     ++row;
@@ -79,18 +80,31 @@ namespace algebra{
         if(!compressed) //If already uncompressed I exit
             return;
         for(std::size_t i=0;i<n_rows;++i){
+            for(std::size_t j=0;j<n_cols;++j){
+                std::array<std::size_t,2> key={i,j};
+                COOmap[key]=default_t
+            }
+        }
+        /*unsigned row=0;
+        unsigned counter=inner_indices[row+1];
+        for(std::size_t k=0;k<n_nnz;++k){
+            if()
+                ++row;
+            std::array<std::size_t,2> key={row,outer_indices[k]};
+
+        }*/
+        //DA FINRE
+        for(std::size_t i=0;i<n_rows;++i){
             unsigned n1=outer_indices[i+1],n2=n_nnz, k=n1;
             if(i<n_rows-1)
                 n2=outer_indices[i+2];
             for(size_t j=0;j<n_cols;++j){ //I know n_cols will have to have been initialized either in the call operator (non const) or in the default constructor, since I cannot add elements in the compressed state
                 std::array<std::size_t,2> key={i,j};
                 if(j!=outer_indices[k]){ //If null element insert 0 value
-                    auto v=std::make_pair<std::array<std::size_t,2>,T> (key,default_t);
-                    COOmap.insert(v);
+                    COOmap[key]=default_t;
                 }
                 else{ //If non null insert value and update the counter
-                    auto v=std::make_pair<std::array<std::size_t,2>,T> (key,values[k]);
-                    COOmap.insert(v);
+                    COOmap[key]=values[k];
                     if(k+1!=n2) //if we haven't reached the end of the row, update the counter of non zero elements
                         ++k;
                 }
@@ -100,6 +114,7 @@ namespace algebra{
         values.clear();
         outer_indices.clear();
         inner_indices.clear();
+        compressed=false;
     }
     template<typename T,StorageOrder S>
     const T & 
@@ -117,17 +132,17 @@ namespace algebra{
         unsigned n1=inner_indices[i+1],n2=n_nnz;
         if(i<n_rows-1)
             n2=inner_indices[i+2];
-        for(std::size_t k=n1;k<=n2;++k){//I am cycling through the non null elements of the row
+        for(std::size_t k=n1;k<n2;++k){//I am cycling through the non null elements of the row
             if(outer_indices[k]==j)
                 return values[k]; //If the element is non null I return it
         }
-        return default_t; //If the element is null I return the default value
+        return 0; //If the element is null I return the default value
     }
 
     template<typename T,StorageOrder S>
     T & 
     Matrix<T,S>::operator() (const std::size_t & _i, const std::size_t &_j) {
-        T default_t;
+        T default_t=0;
         if(compressed &&(_i>=n_rows||_j>=n_cols)){ //If the user tries to add a new element when the matrix is in a compressed state, return an error
             std::cerr<<"You cannot add new elements when the matrix is in a compressed state"<<std::endl;
             //return std::numeric_limits<T>::quiet_Nan();
@@ -135,12 +150,13 @@ namespace algebra{
         }
         if(compressed){
             unsigned n1=inner_indices[_i+1],n2=n_nnz;
-            if(_i<n_rows-1)
-                n2=inner_indices[_i+2];
-            for(std::size_t k=n1;k<=n2;++k){//I am cycling through the non null elements of the row
+            if(_i<n_rows-1&&inner_indices[_i+2]<n_nnz) //the second condition is not necessary, just to be safe
+                n2 = inner_indices[_i+2];
+            for(std::size_t k=n1;k<n2;++k){//I am cycling through the non null elements of the row
                 if(outer_indices[k]==_j)
                     return values[k]; //If the element is non null I return it
             }
+            std::cout<<"mmh"<<std::endl;
             return default_t; //If I get a zero element return a default value for T
         }
         if(_i<n_rows&&_j<n_cols){

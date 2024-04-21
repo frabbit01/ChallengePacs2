@@ -117,7 +117,7 @@ namespace algebra{
         unsigned n1=inner_indices[j+1],n2=n_nnz;
         if(j<n_cols-1)
             n2=inner_indices[j+2];
-        for(std::size_t k=n1;k<=n2;++k){//I am cycling through the non null elements of the row
+        for(std::size_t k=n1;k<n2;++k){//I am cycling through the non null elements of the row
             if(outer_indices[k]==i)
                 return values[k]; //If the element is non null I return it
         }
@@ -137,7 +137,7 @@ namespace algebra{
             unsigned n1=inner_indices[_j+1],n2=n_nnz;
             if(_j<n_cols-1)
                 n2=inner_indices[_j+2];
-            for(std::size_t k=n1;k<=n2;++k){//I am cycling through the non null elements of the row
+            for(std::size_t k=n1;k<n2;++k){//I am cycling through the non null elements of the row
                 if(outer_indices[k]==_i)
                     return values[k]; //If the element is non null I return it
             }

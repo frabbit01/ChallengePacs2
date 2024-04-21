@@ -51,9 +51,9 @@ namespace algebra{
             unsigned n_rows; //Initialized in the constructor (non default)
             unsigned n_cols; //Initialized in the constructor (non default)
             unsigned n_nnz=0; //I want to update this every time I use the call operator or resize the matrix in any way
-            std::vector<std::size_t> inner_indices; //I initialize this in the uncompress method; starting index for the element of each row
-            std::vector<std::size_t> outer_indices; //I initialize this in the uncompress method; corresponding column idxs
-            std::vector<T> values; //I initialize this in the uncompress method; values vector
+            std::vector<std::size_t> inner_indices; //I initialize this in the compress method; starting index for the element of each row
+            std::vector<std::size_t> outer_indices; //I initialize this in the compress method; corresponding column idxs
+            std::vector<T> values; //I initialize this in the compress method; values vector
 
             //COOmap format
             std::map<std::array<std::size_t,2>,T> COOmap;
