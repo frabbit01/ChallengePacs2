@@ -22,7 +22,7 @@ namespace algebra{
                         std::array<std::size_t,2> key={i,j};
                         T default_t;
                         if(COOmap[key]!=0)
-                            ++n_nnz; //If the element is not of the default value I increase the number of non zero elements
+                            --n_nnz; //If the element is not of the default value I decrease the number of non zero elements
                         COOmap.erase(key); //I erase the elements out of range for the new dimensions
                     }
                 }
