@@ -46,6 +46,11 @@ namespace algebra{
                 auto itero=outer_indices.begin();
                 if(outer_indices[pos]>=newrows){
                     --n_nnz;
+                    for(std::size_t k=0;k<inner_indices.size();++k){ //I adjust the indices
+                        if(pos<=inner_indices[k]&k>0){
+                            --inner_indices[k];
+                        }
+                    }
                     values.erase(iterv+pos);
                     outer_indices.erase(itero+pos);
                      --pos;

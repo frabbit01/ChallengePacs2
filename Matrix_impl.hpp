@@ -46,6 +46,11 @@ namespace algebra{
                 auto itero=outer_indices.begin();
                 if(outer_indices[pos]>=newcols){
                     --n_nnz;
+                    for(std::size_t k=0;k<inner_indices.size();++k){ //I adjust the indices
+                        if(pos<=inner_indices[k]&k>0){
+                            --inner_indices[k];
+                        }
+                    }
                     values.erase(iterv+pos);
                     outer_indices.erase(itero+pos);
                      --pos;
@@ -151,8 +156,7 @@ namespace algebra{
             unsigned n1=inner_indices[_i],n2=n_nnz;
             if(_i<n_rows&&inner_indices[_i+1]<n_nnz)//just to be safe
                 n2=inner_indices[_i+1];
-            for(std::size_t k=n1;k<n2;++k){
-                std::cout<<outer_indices[k]<<std::endl;//I am cycling through the non null elements of the row
+            for(std::size_t k=n1;k<n2;++k){//I am cycling through the non null elements of the row
                 if(outer_indices[k]==_j){
                     return values[k]; //If the element is non null I return it
                 }
