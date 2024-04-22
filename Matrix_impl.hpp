@@ -54,15 +54,15 @@ namespace algebra{
         std::size_t count=0,i=0,row=0;
         bool start_row=false;//flag to check when the first non null element of a row is
         for(auto iter=COOmap.begin();iter!=COOmap.end();++iter){
-            //std::cout<<"iterazione: "<<check<<std::endl;
-            if(iter->first[0]!=row) //I reset the flag when I go to the next row in the matrix
-                start_row=false; 
+            if(iter->first[0]!=row){ //I reset the flag when I go to the next row in the matrix
+                start_row=false;
+                ++row;
+            }
             if(iter->second!=0){
                 values[i]=iter->second;//store nnz value
                 outer_indices[i]=iter->first[1];//store column index
                 ++i;
                 if(!start_row){//when the row has the first non zero element
-                    ++row;
                     inner_indices[row]=count; //store the number of non zero elements before reaching this element
                     start_row=true;
                 }
@@ -76,39 +76,25 @@ namespace algebra{
     template<typename T,StorageOrder S>
     void
     Matrix<T,S>::uncompress(){
-        T default_t;
+        T default_t=0;
         if(!compressed) //If already uncompressed I exit
             return;
+        //I start by creating a map of the right length
         for(std::size_t i=0;i<n_rows;++i){
             for(std::size_t j=0;j<n_cols;++j){
                 std::array<std::size_t,2> key={i,j};
-                COOmap[key]=default_t
+                COOmap[key]=default_t;
             }
         }
-        /*unsigned row=0;
-        unsigned counter=inner_indices[row+1];
+        unsigned row=0; //here I keep track of what row I am at
+        unsigned counter=inner_indices[row+1]; //this helps me keep track of when I need to update the row index
         for(std::size_t k=0;k<n_nnz;++k){
-            if()
+            if(k==counter&&row<n_rows){
                 ++row;
-            std::array<std::size_t,2> key={row,outer_indices[k]};
-
-        }*/
-        //DA FINRE
-        for(std::size_t i=0;i<n_rows;++i){
-            unsigned n1=outer_indices[i+1],n2=n_nnz, k=n1;
-            if(i<n_rows-1)
-                n2=outer_indices[i+2];
-            for(size_t j=0;j<n_cols;++j){ //I know n_cols will have to have been initialized either in the call operator (non const) or in the default constructor, since I cannot add elements in the compressed state
-                std::array<std::size_t,2> key={i,j};
-                if(j!=outer_indices[k]){ //If null element insert 0 value
-                    COOmap[key]=default_t;
-                }
-                else{ //If non null insert value and update the counter
-                    COOmap[key]=values[k];
-                    if(k+1!=n2) //if we haven't reached the end of the row, update the counter of non zero elements
-                        ++k;
-                }
+                counter=inner_indices[row+1];
             }
+            std::array<std::size_t,2> key={row,outer_indices[k]};
+            COOmap[key]=values[k];
         }
         //clear the vectors
         values.clear();
