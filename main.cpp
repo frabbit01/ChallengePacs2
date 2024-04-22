@@ -10,6 +10,7 @@ int main(){
     matrix=matrix.read_market_matrix(filename); //here I read the matrix
     std::cout<<matrix(43,34)<<std::endl; //here I check that the values and dimensions are correct
     std::cout<<"rows: "<<matrix.rows()<<"\ncolumns: "<<matrix.columns()<<"\nnon-zero elems: "<<matrix.nnz()<<std::endl;
+    std::vector<double> vec;
     matrix.compress();
     //matrix.uncompress();
     //matrix(131,131)=3; //sistemare questo errore
@@ -21,7 +22,8 @@ int main(){
     std::cout<<matrix(43,34)<<std::endl; 
     //std::cout<<"rows: "<<matrix.rows()<<"\n columns: "<<matrix.columns()<<"\nnon-zero elems: "<<matrix.nnz()<<std::endl;
     matrix.resize(50,50); //after having compressed n_nz is wrong!
-    std::cout<<matrix(43,34)<<std::endl; //THIS GOES TO SEGMENTATION FAULT AFTER RESIZING A COMPRESSED MATRIX??? only for csr??
+    std::cout<<matrix(43,34)<<std::endl; //prints wrong value! but only for csr
+    std::cout<<"yes"<<std::endl; 
     std::cout<<"rows: "<<matrix.rows()<<"\ncolumns: "<<matrix.columns()<<"\nnon-zero elems: "<<matrix.nnz()<<std::endl;
 
     //here I test the same for a column order matrix

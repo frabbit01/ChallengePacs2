@@ -92,7 +92,6 @@ namespace algebra{
     template<typename T>
     void
     Matrix<T,StorageOrder::Columns>::uncompress(){
-        T default_t;
         if(!compressed) //If already uncompressed I exit
             return;
          //I start by creating a map of the right length
@@ -122,7 +121,6 @@ namespace algebra{
     template<typename T>
     const T & 
     Matrix<T,StorageOrder::Columns>::operator() (const std::size_t & i, const std::size_t &j) const{
-        T default_t;
         if(i>=n_rows||j>=n_cols){ //I check if I am within the matrix dimensions
             std::cerr<<"out of bounds"<<std::endl; 
             return std::numeric_limits<T>::quiet_Nan();
@@ -145,7 +143,6 @@ namespace algebra{
     template<typename T>
     T & 
     Matrix<T,StorageOrder::Columns>::operator() (const std::size_t & _i, const std::size_t &_j) {
-        T default_t=0;
         if(compressed &&(_i>=n_rows||_j>=n_cols)){ //If the user tries to add a new element when the matrix is in a compressed state, return an error
             std::cerr<<"You cannot add new elements when the matrix is in a compressed state"<<std::endl;
             //return std::numeric_limits<T>::quiet_Nan();

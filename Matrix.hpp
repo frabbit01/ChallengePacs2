@@ -60,6 +60,9 @@ namespace algebra{
 
             //check for format
             bool compressed;
+
+            //member i use to return 0 element 
+            T default_t= 0;
     };
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -128,6 +131,9 @@ namespace algebra{
             std::map<std::array<std::size_t,2>,T,CompareKeysCSC> COOmap;
             //check for format
             bool compressed;
+
+            //default value
+            T default_t=0;
     };
 }; //namespace algebra
 
