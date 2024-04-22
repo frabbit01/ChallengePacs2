@@ -20,7 +20,6 @@ namespace algebra{
                 for(std::size_t j=0;j<n_cols;++j){
                     if(i>=newrows||j>=newcols){
                         std::array<std::size_t,2> key={i,j};
-                        T default_t;
                         if(COOmap[key]!=0)
                             --n_nnz; //If the element is not of the default value I decrease the number of non zero elements
                         COOmap.erase(key); //I erase the elements out of range for the new dimensions
@@ -29,14 +28,31 @@ namespace algebra{
             }
         }
         else{
-            std::size_t diff=n_nnz-inner_indices[newcols+1]; //number of elements to erase
+            std::size_t diff=n_nnz-inner_indices[newcols]; //number of elements to erase
             auto last=outer_indices.end(); //I delete the outer indices corresponding to the non zero elements to erase
             auto first=last-diff;
             outer_indices.erase(first,last);
+            auto lastv=values.end(); //I delete the values corresponding to the non zero elements to erase
+            auto firstv=lastv-diff;
+            values.erase(firstv,lastv);
+            n_nnz-=diff;
             auto last_i=inner_indices.end(); //I delete the inner indices corresponding to the deleted rows
-            auto first_i=last-(n_cols-newcols);
+            auto first_i=last_i-(n_cols-newcols);
             inner_indices.erase(first_i,last_i);
-            n_nnz-=diff; //new number of nonzero elements
+            std::size_t actual_size=outer_indices.size();
+            unsigned pos=0;
+            while(pos<actual_size){
+                auto iterv=values.begin();
+                auto itero=outer_indices.begin();
+                if(outer_indices[pos]>=newrows){
+                    --n_nnz;
+                    values.erase(iterv+pos);
+                    outer_indices.erase(itero+pos);
+                     --pos;
+                    --actual_size;
+                }
+                ++pos;
+            }
         }
         //I update the dimensions
         n_rows=newrows;

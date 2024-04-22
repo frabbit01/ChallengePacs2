@@ -20,7 +20,6 @@ namespace algebra{
                 for(std::size_t j=0;j<n_cols;++j){
                     if(i>=newrows||j>=newcols){
                         std::array<std::size_t,2> key={i,j};
-                        T default_t;
                         if(COOmap[key]!=0)
                             --n_nnz; //If the element is not of the default value I decrease the number of non zero elements
                         COOmap.erase(key); //I erase the elements out of range for the new dimensions
@@ -33,10 +32,27 @@ namespace algebra{
             auto last=outer_indices.end(); //I delete the outer indices corresponding to the non zero elements to erase
             auto first=last-diff;
             outer_indices.erase(first,last);
+            auto lastv=values.end(); //I delete the values corresponding to the non zero elements to erase
+            auto firstv=lastv-diff;
+            values.erase(firstv,lastv);
+            n_nnz-=diff;
             auto last_i=inner_indices.end(); //I delete the inner indices corresponding to the deleted rows
-            auto first_i=last-(n_rows-newrows);
+            auto first_i=last_i-(n_rows-newrows);
             inner_indices.erase(first_i,last_i);
-            n_nnz-=diff; //new number of nonzero elements
+            std::size_t actual_size=outer_indices.size();
+            unsigned pos=0;
+            while(pos<actual_size){
+                auto iterv=values.begin();
+                auto itero=outer_indices.begin();
+                if(outer_indices[pos]>=newcols){
+                    --n_nnz;
+                    values.erase(iterv+pos);
+                    outer_indices.erase(itero+pos);
+                     --pos;
+                    --actual_size;
+                }
+                ++pos;
+            }
         }
         //I update the dimensions
         n_rows=newrows;
@@ -136,14 +152,15 @@ namespace algebra{
         }
         if(compressed){
             unsigned n1=inner_indices[_i],n2=n_nnz;
-            if(_i<n_rows&&inner_indices[_i+1]<n_nnz) //just to be safe
-                n2 = inner_indices[_i+1];
+            if(_i<n_rows&&inner_indices[_i+1]<n_nnz)//just to be safe
+                n2=inner_indices[_i+1];
             for(std::size_t k=n1;k<n2;++k){//I am cycling through the non null elements of the row
+                std::cout<<outer_indices.size()<<std::endl;
                 if(outer_indices[k]==_j){
+                    std::cout<<"ok"<<std::endl;
                     return values[k]; //If the element is non null I return it
                 }
             }
-            
             return default_t; //If I get a zero element return a default value for T
         }
         if(_i<n_rows&&_j<n_cols){

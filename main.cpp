@@ -18,10 +18,10 @@ int main(){
     //matrix(131,131)=3;
     //matrix.set_nnz(matrix.nnz()+1); //this does not work
     //std::cout<<matrix(131,131)<<std::endl; //I verify that the insertion worked correctly: da sistemare, non voglio che n_nnz sia aggiornato automaticamente
-    std::cout<<matrix(43,34)<<std::endl; //accessing after compressing doesn't go well but if I compress, then uncompress ok
+    std::cout<<matrix(43,34)<<std::endl; 
     //std::cout<<"rows: "<<matrix.rows()<<"\n columns: "<<matrix.columns()<<"\nnon-zero elems: "<<matrix.nnz()<<std::endl;
     matrix.resize(50,50); //after having compressed n_nz is wrong!
-    std::cout<<matrix(43,34)<<std::endl;
+    std::cout<<matrix(43,34)<<std::endl; //THIS GOES TO SEGMENTATION FAULT AFTER RESIZING A COMPRESSED MATRIX??? only for csr??
     std::cout<<"rows: "<<matrix.rows()<<"\ncolumns: "<<matrix.columns()<<"\nnon-zero elems: "<<matrix.nnz()<<std::endl;
 
     //here I test the same for a column order matrix
@@ -30,7 +30,7 @@ int main(){
     std::cout<<matrix_columns(43,34)<<std::endl; //here I check that the values and dimensions are correct
     std::cout<<"rows: "<<matrix_columns.rows()<<"\ncolumns: "<<matrix_columns.columns()<<"\nnon-zero elems: "<<matrix_columns.nnz()<<std::endl;
     matrix_columns.compress();
-    matrix_columns.uncompress();
+    //matrix_columns.uncompress();
     matrix_columns.resize(50,50);
     std::cout<<matrix_columns(43,34)<<std::endl; 
     std::cout<<"rows: "<<matrix_columns.rows()<<"\ncolumns: "<<matrix_columns.columns()<<"\nnon-zero elems: "<<matrix_columns.nnz()<<std::endl;
