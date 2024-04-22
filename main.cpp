@@ -9,9 +9,9 @@ int main(){
     Matrix<double,StorageOrder::Rows> matrix;
     matrix=matrix.read_market_matrix(filename); //here I read the matrix
     std::cout<<matrix(43,34)<<std::endl; //here I check that the values and dimensions are correct
-    std::cout<<"rows: "<<matrix.rows()<<"\n columns: "<<matrix.columns()<<"\nnon-zero elems: "<<matrix.nnz()<<std::endl;
+    std::cout<<"rows: "<<matrix.rows()<<"\ncolumns: "<<matrix.columns()<<"\nnon-zero elems: "<<matrix.nnz()<<std::endl;
     matrix.compress();
-    matrix.uncompress();
+    //matrix.uncompress();
     //matrix(131,131)=3; //sistemare questo errore
     //std::cout<<matrix(130,130)<<std::endl;
     //matrix.uncompress(); //errore!*/
@@ -24,9 +24,9 @@ int main(){
     Matrix<double,StorageOrder::Columns> matrix_columns; 
     matrix_columns=matrix_columns.read_market_matrix(filename); 
     std::cout<<matrix_columns(43,34)<<std::endl; //here I check that the values and dimensions are correct
-    std::cout<<"rows: "<<matrix_columns.rows()<<"\n columns: "<<matrix_columns.columns()<<"\nnon-zero elems: "<<matrix_columns.nnz()<<std::endl;
+    std::cout<<"rows: "<<matrix_columns.rows()<<"\ncolumns: "<<matrix_columns.columns()<<"\nnon-zero elems: "<<matrix_columns.nnz()<<std::endl;
     matrix_columns.compress();
-    matrix_columns.uncompress();
+    //matrix_columns.uncompress();
     std::cout<<matrix_columns(43,34)<<std::endl; 
     return 0;
 }

@@ -115,9 +115,9 @@ namespace algebra{
             return COOmap[key];
         }
 
-        unsigned n1=inner_indices[i+1],n2=n_nnz;
-        if(i<n_rows-1)
-            n2=inner_indices[i+2];
+        unsigned n1=inner_indices[i],n2=n_nnz;
+        if(i<n_rows)
+            n2=inner_indices[i+1];
         for(std::size_t k=n1;k<n2;++k){//I am cycling through the non null elements of the row
             if(outer_indices[k]==j)
                 return values[k]; //If the element is non null I return it
@@ -135,14 +135,15 @@ namespace algebra{
             return default_t;
         }
         if(compressed){
-            unsigned n1=inner_indices[_i+1],n2=n_nnz;
-            if(_i<n_rows-1&&inner_indices[_i+2]<n_nnz) //the second condition is not necessary, just to be safe
-                n2 = inner_indices[_i+2];
+            unsigned n1=inner_indices[_i],n2=n_nnz;
+            if(_i<n_rows&&inner_indices[_i+1]<n_nnz) //just to be safe
+                n2 = inner_indices[_i+1];
             for(std::size_t k=n1;k<n2;++k){//I am cycling through the non null elements of the row
-                if(outer_indices[k]==_j)
+                if(outer_indices[k]==_j){
                     return values[k]; //If the element is non null I return it
+                }
             }
-            std::cout<<"mmh"<<std::endl;
+            
             return default_t; //If I get a zero element return a default value for T
         }
         if(_i<n_rows&&_j<n_cols){

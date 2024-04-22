@@ -116,9 +116,9 @@ namespace algebra{
             return COOmap[key];
         }
 
-        unsigned n1=inner_indices[j+1],n2=n_nnz;
-        if(j<n_cols-1)
-            n2=inner_indices[j+2];
+        unsigned n1=inner_indices[j],n2=n_nnz;
+        if(j<n_cols)
+            n2=inner_indices[j+1];
         for(std::size_t k=n1;k<n2;++k){//I am cycling through the non null elements of the row
             if(outer_indices[k]==i)
                 return values[k]; //If the element is non null I return it
@@ -129,16 +129,16 @@ namespace algebra{
     template<typename T>
     T & 
     Matrix<T,StorageOrder::Columns>::operator() (const std::size_t & _i, const std::size_t &_j) {
-        T default_t;
+        T default_t=0;
         if(compressed &&(_i>=n_rows||_j>=n_cols)){ //If the user tries to add a new element when the matrix is in a compressed state, return an error
             std::cerr<<"You cannot add new elements when the matrix is in a compressed state"<<std::endl;
             //return std::numeric_limits<T>::quiet_Nan();
             return default_t;
         }
         if(compressed){
-            unsigned n1=inner_indices[_j+1],n2=n_nnz;
-            if(_j<n_cols-1)
-                n2=inner_indices[_j+2];
+            unsigned n1=inner_indices[_j],n2=n_nnz;
+            if(_j<n_cols&&inner_indices[_j+1]<n_nnz)//just to be safe
+                n2=inner_indices[_j+1];
             for(std::size_t k=n1;k<n2;++k){//I am cycling through the non null elements of the row
                 if(outer_indices[k]==_i)
                     return values[k]; //If the element is non null I return it
