@@ -16,6 +16,9 @@ namespace algebra{
             unsigned rows() const {return n_rows;}
             unsigned columns() const {return n_cols;}
             unsigned nnz() const {return n_nnz;}
+            std::vector<T> get_values() const {return values;}
+            std::vector<std::size_t> get_inner_indices() const {return inner_indices;}
+            std::vector<std::size_t> get_outer_indices() const {return outer_indices;}
             //setter
             void set_nnz(unsigned n){n_nnz=n;}
             //other methods
@@ -29,7 +32,7 @@ namespace algebra{
             Matrix()=default; //default constructor
             //It is not necessary to specialize this constructor, for the CSC it is necessary to implement a new comparison operator
             Matrix(unsigned _n_rows,unsigned _n_cols):  //constructor that takes size of the matrix as input
-            n_rows(_n_rows),n_cols(_n_cols),compressed(false){
+            n_rows(_n_rows),n_cols(_n_cols),n_nnz(0),compressed(false),default_t(0){
                 T default_t;
                 for(std::size_t i=0;i<n_rows;++i){
                     for(std::size_t j=0;j<n_cols;++j){
@@ -86,6 +89,9 @@ namespace algebra{
             unsigned rows() const {return n_rows;}
             unsigned columns() const {return n_cols;}
             unsigned nnz() const {return n_nnz;}
+            std::vector<T> get_values() const {return values;}
+            std::vector<std::size_t> get_inner_indices() const {return inner_indices;}
+            std::vector<std::size_t> get_outer_indices() const {return outer_indices;}
             //setter
             void set_nnz(unsigned n){n_nnz=n;} //The only problem with this is that I have to call this manually, since I do not know whether the value after insertion is 0 or not
             //other methods
@@ -100,7 +106,7 @@ namespace algebra{
             Matrix()=default; //default constructor
             //It is not necessary to specialize this constructor, for the CSC it is necessary to implement a new comparison operator
             Matrix(unsigned _n_rows,unsigned _n_cols):  //constructor that takes size of the matrix as input
-            n_rows(_n_rows),n_cols(_n_cols),compressed(false){
+            n_rows(_n_rows),n_cols(_n_cols),n_nnz(0),compressed(false),default_t(0){
                 T default_t;
                 for(std::size_t i=0;i<n_rows;++i){
                     for(std::size_t j=0;j<n_cols;++j){

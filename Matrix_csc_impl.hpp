@@ -73,7 +73,7 @@ namespace algebra{
         outer_indices=std::vector<std::size_t>(n_nnz);
         values=std::vector<T>(n_nnz);
         std::size_t count=0,i=0,col=0;
-        bool start_col=false;//flag to check when the first non null element of a row is
+        bool start_col=true;//flag to check when the first non null element of a row is
         for(auto iter=COOmap.cbegin();iter!=COOmap.cend();++iter){
             if(iter->first[1]!=col){ //I reset the flag when I go to the next row in the matrix
                 start_col=false; 
@@ -89,6 +89,7 @@ namespace algebra{
                 }
                 ++count; //I count the non-zero elements
             }
+            inner_indices[col+1]=count;
         }
         COOmap.clear(); //I clear the map for the COOmap format
         compressed=true;
