@@ -199,7 +199,7 @@ namespace algebra{
                 std::cerr<<"incompatible dimensions for matrix vector multiplication"<<std::endl;
                 return {};
             }
-        std::vector<T> res(v.size());
+        std::vector<T> res(M.n_rows,T(0));
         if(M.compressed){
             for(std::size_t j=0;j<M.n_cols;++j){
                 std::size_t n_elems=M.inner_indices[j+1], old_n_elems=M.inner_indices[j];

@@ -40,7 +40,7 @@ int main(){
 
     //testing for matrix vector multiplication, next to implement with random vector generator
 
-    Matrix<std::complex<double>,StorageOrder::Columns> R(3,2);
+    Matrix<std::complex<double>,StorageOrder::Rows> R(3,2);
     //std::cout<<"ok"<<std::endl; //if i do not print this I get an error
     //std::cout<<R.nnz()<<std::endl;
     std::vector<std::complex<double>> v,result(3);
@@ -53,12 +53,12 @@ int main(){
         }
     }
     R.set_nnz(5);
-    R.compress(); //need to remove every comparison with 0 and put it as default_t
+    //R.compress(); //need to remove every comparison with 0 and put it as default_t
     //R.uncompress();
     //auto outer_indices=R.get_outer_indices();
     
     //R.uncompress(); 
-    std::cout<<v[0]<<std::endl; //printing this here makes the whole code work: so it means the problem is in the matrix vec multiplication?
+    //std::cout<<v[0]<<std::endl; //printing this here makes the whole code work: so it means the problem is in the matrix vec multiplication?
     result=R*v; 
     
     //std::cout<<"R:\n"<<" "<<R(0,1)<<"\n"<<R(1,0)<<" "<<R(1,1)<<std::endl;
