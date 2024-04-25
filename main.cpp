@@ -39,23 +39,27 @@ int main(){
 
     //testing for matrix vector multiplication, next to implement with random vector generator
 
-    Matrix<double,StorageOrder::Columns> R(2,2);
+    Matrix<double,StorageOrder::Rows> R(3,2);
     //std::cout<<R.nnz()<<std::endl;
-    std::vector<double> v={1.0,2.0},result(2);
-    for (std::size_t i=0;i<2;++i){
+    std::vector<double> v={1.0,2.0},result(3);
+    for (std::size_t i=0;i<3;++i){
         for(std::size_t j=0;j<2;++j){
             R(i,j)=double(i+2*j/2);
         }
     }
-    R.set_nnz(3);
-    R.compress();
+    R.set_nnz(5);
+    //std::cout<<outer_indices[0]<<outer_indices[1]<<outer_indices[2]<<std::endl;
+    R.compress(); //goes into segmentation fault when you do not set the number of nonzero elements manually
+    //R.uncompress();
+    auto outer_indices=R.get_outer_indices();
+    
     //the values are initialized correctly in the compress method: why are they not accessed correctly??
     //R.uncompress(); //when I uncompress I get the right matrix! so this means that the elements are stored correctly in the compressed matrix!
     result=R*v; //does not work when R is compressed: wrong result!
     //std::cout<<"R:\n"<<" "<<R(0,1)<<"\n"<<R(1,0)<<" "<<R(1,1)<<std::endl;
-    std::cout<<"R:\n"<<R(0,0)<<" "<<R(0,1)<<"\n"<<R(1,0)<<" "<<R(1,1)<<std::endl; //R is not getting initialized correctly when compressed (csc), segmentation fault when csr
+    std::cout<<"R:\n"<<R(0,0)<<" "<<R(0,1)<<"\n"<<R(1,0)<<" "<<R(1,1)<<"\n"<<R(2,0)<<" "<<R(2,1)<<std::endl; 
     //std::cout<<"R:\n"<<R(0,1)<<" "<<R(1,1)<<"\n"<<R(2,0)<<" "<<R(2,1)<<std::endl;
     //I think the issue is when I try returning a zero element from a compressed matrix
-    std::cout<<"matrix vector multiplication result: "<<result[0]<<" , "<<result[1]<<std::endl;
+    std::cout<<"matrix vector multiplication result: "<<result[0]<<" , "<<result[1]<<" "<<result[2]<<std::endl;
     return 0;
 }

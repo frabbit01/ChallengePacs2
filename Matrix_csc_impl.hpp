@@ -203,8 +203,8 @@ namespace algebra{
         if(M.compressed){
             for(std::size_t j=0;j<M.n_cols;++j){
                 std::size_t n_elems=M.inner_indices[j+1], old_n_elems=M.inner_indices[j];
-                for(std::size_t k=old_n_elems-1;k<n_elems;++k){
-                    res[M.outer_indices[k-old_n_elems+1]]+=M.values[k]*v[j];
+                for(std::size_t k=old_n_elems;k<n_elems;++k){
+                    res[M.outer_indices[k]]+=M.values[k]*v[j];
                 }
             }
             
