@@ -79,7 +79,7 @@ namespace algebra{
                 start_row=false;
                 ++row;
             }
-            if(iter->second!=0){
+            if(iter->second!=default_t){
                 values[i]=iter->second;//store nnz value
                 outer_indices[i]=iter->first[1];//store column index
                 ++i;

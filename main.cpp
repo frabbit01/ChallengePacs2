@@ -3,6 +3,7 @@
 //I write a main to test my implementation
 #include<fstream>
 #include<string>
+#include<complex>
 using namespace algebra;
 int main(){
     //const char * filename= "lnsp_131.mtx"; //I used this object instead of a file stream since the library I used was originally written for C, so in order to avoid conflicts I used fopen and fclose
@@ -39,23 +40,29 @@ int main(){
 
     //testing for matrix vector multiplication, next to implement with random vector generator
 
-    Matrix<double,StorageOrder::Rows> R(3,2);
+    Matrix<std::complex<double>,StorageOrder::Columns> R(3,2);
+    //std::cout<<"ok"<<std::endl; //if i do not print this I get an error
     //std::cout<<R.nnz()<<std::endl;
-    std::vector<double> v={1.0,2.0},result(3);
+    std::vector<std::complex<double>> v,result(3);
+    v.push_back(std::complex<double>(1.0,1.0));
+    v.push_back(std::complex<double> (2.0,2.0));
     for (std::size_t i=0;i<3;++i){
         for(std::size_t j=0;j<2;++j){
-            R(i,j)=double(i+2*j/2);
+            std::complex<double> temp (3*i/2,2*j);
+            R(i,j)=temp;
         }
     }
     R.set_nnz(5);
-ì    R.compress(); //goes into segmentation fault when you do not set the number of nonzero elements manually
+    R.compress(); //need to remove every comparison with 0 and put it as default_t
     //R.uncompress();
-    auto outer_indices=R.get_outer_indices();
+    //auto outer_indices=R.get_outer_indices();
     
     //R.uncompress(); 
+    std::cout<<v[0]<<std::endl; //printing this here makes the whole code work: so it means the problem is in the matrix vec multiplication?
     result=R*v; 
+    
     //std::cout<<"R:\n"<<" "<<R(0,1)<<"\n"<<R(1,0)<<" "<<R(1,1)<<std::endl;
-    std::cout<<"R:\n"<<R(0,0)<<" "<<R(0,1)<<"\n"<<R(1,0)<<" "<<R(1,1)<<"\n"<<R(2,0)<<" "<<R(2,1)<<std::endl; 
-    std::cout<<"matrix vector multiplication result: "<<result[0]<<" , "<<result[1]<<" "<<result[2]<<std::endl;
+    //std::cout<<"R:\n"<<R(0,0)<<" "<<R(0,1)<<"\n"<<R(1,0)<<" "<<R(1,1)<<"\n"<<R(2,0)<<" "<<R(2,1)<<std::endl; 
+    std::cout<<"matrix vector multiplication result: "<<result[0]<<" , "<<result[1]<<" "<<result[2]<<std::endl; //without printing "ok " program crashes here
     return 0;
 }
