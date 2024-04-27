@@ -5,15 +5,23 @@
 #include<string>
 #include<complex>
 #include<chrono.hpp>
+#include <random>
 using namespace algebra;
 int main(){
     Timings::Chrono chrono_object;
-    //const char * filename= "lnsp_131.mtx"; //I used this object instead of a file stream since the library I used was originally written for C, so in order to avoid conflicts I used fopen and fclose
-    //Matrix<double,StorageOrder::Rows> matrix;
-    //matrix=matrix.read_market_matrix(filename); //here I read the matrix
+    std::default_random_engine engine{42};
+    std::uniform_real_distribution<> distr{-1.0,100.0};
+    const char * filename= "lnsp_131.mtx"; //I used this object instead of a file stream since the library I used was originally written for C, so in order to avoid conflicts I used fopen and fclose
+    Matrix<double,StorageOrder::Rows> matrix;
+    matrix=matrix.read_market_matrix(filename); //here I read the matrix
     //std::cout<<matrix(43,34)<<std::endl; //here I check that the values and dimensions are correct
-    //std::cout<<"rows: "<<matrix.rows()<<"\ncolumns: "<<matrix.columns()<<"\nnon-zero elems: "<<matrix.nnz()<<std::endl;
-    //std::vector<double> vec;
+    std::cout<<"rows: "<<matrix.rows()<<"\ncolumns: "<<matrix.columns()<<"\nnon-zero elems: "<<matrix.nnz()<<std::endl;
+    std::vector<double> vector(matrix.columns());
+    for(std::size_t i=0;i<vector.size();++i){
+        vector[i]=distr(engine);
+    }
+    auto result=matrix*vector;
+    std::cout<<result[0]<<std::endl;
     //matrix.compress();
     //matrix.uncompress();
     //matrix(131,131)=3; //sistemare questo errore
@@ -30,19 +38,21 @@ int main(){
 
 
     //here I test the same for a column order matrix
-    //Matrix<double,StorageOrder::Columns> matrix_columns; 
-    //matrix_columns=matrix_columns.read_market_matrix(filename); 
+    Matrix<double,StorageOrder::Columns> matrix_columns; 
+    matrix_columns=matrix_columns.read_market_matrix(filename); 
     //std::cout<<matrix_columns(43,34)<<std::endl; //here I check that the values and dimensions are correct
-    //std::cout<<"rows: "<<matrix_columns.rows()<<"\ncolumns: "<<matrix_columns.columns()<<"\nnon-zero elems: "<<matrix_columns.nnz()<<std::endl;
-    //matrix_columns.compress();
+    std::cout<<"rows: "<<matrix_columns.rows()<<"\ncolumns: "<<matrix_columns.columns()<<"\nnon-zero elems: "<<matrix_columns.nnz()<<std::endl;
+    matrix_columns.compress();
     //matrix_columns.uncompress();
     //matrix_columns.resize(50,50);
     //std::cout<<matrix_columns(43,34)<<std::endl; 
+    result=matrix_columns*vector;
+    std::cout<<result[0]<<std::endl;
     //std::cout<<"rows: "<<matrix_columns.rows()<<"\ncolumns: "<<matrix_columns.columns()<<"\nnon-zero elems: "<<matrix_columns.nnz()<<std::endl;
 
-    //testing for matrix vector multiplication, next to implement with random vector generator
+    //testing for matrix vector multiplication and with complex numbers
 
-    Matrix<std::complex<double>,StorageOrder::Rows> R(3,2);
+    /*Matrix<std::complex<double>,StorageOrder::Rows> R(3,2);
     //std::cout<<"ok"<<std::endl; //if i do not print this I get an error
     //std::cout<<R.nnz()<<std::endl;
     std::vector<std::complex<double>> v,result(3);
@@ -68,6 +78,6 @@ int main(){
     std::cout<<chrono_object<<std::endl;
     //std::cout<<"R:\n"<<" "<<R(0,1)<<"\n"<<R(1,0)<<" "<<R(1,1)<<std::endl;
     //std::cout<<"R:\n"<<R(0,0)<<" "<<R(0,1)<<"\n"<<R(1,0)<<" "<<R(1,1)<<"\n"<<R(2,0)<<" "<<R(2,1)<<std::endl; 
-    std::cout<<"matrix vector multiplication result: "<<result[0]<<" , "<<result[1]<<" "<<result[2]<<std::endl; //without printing "ok " program crashes here
+    std::cout<<"matrix vector multiplication result: "<<result[0]<<" , "<<result[1]<<" "<<result[2]<<std::endl; //without printing "ok " program crashes here*/
     return 0;
 }
