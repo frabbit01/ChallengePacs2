@@ -20,7 +20,7 @@ namespace algebra{
                 for(std::size_t j=0;j<n_cols;++j){
                     if(i>=newrows||j>=newcols){
                         std::array<std::size_t,2> key={i,j};
-                        if(COOmap[key]!=0)
+                        if(COOmap[key]!=default_t)
                             --n_nnz; //If the element is not of the default value I decrease the number of non zero elements
                         COOmap.erase(key); //I erase the elements out of range for the new dimensions
                     }
