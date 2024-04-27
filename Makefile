@@ -1,6 +1,6 @@
 CXX      ?= g++
 CXXFLAGS ?= -std=c++20
-CPPFLAGS ?= -O3 -Wall -pedantic -I.
+CPPFLAGS ?= -O3 -Wall -pedantic -I../pacs-examples/Examples/include
 LDLIBS   ?= 
 LINK.o := $(LINK.cc)
 

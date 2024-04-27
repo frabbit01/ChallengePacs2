@@ -4,8 +4,10 @@
 #include<fstream>
 #include<string>
 #include<complex>
+#include<chrono.hpp>
 using namespace algebra;
 int main(){
+    Timings::Chrono chrono_object;
     //const char * filename= "lnsp_131.mtx"; //I used this object instead of a file stream since the library I used was originally written for C, so in order to avoid conflicts I used fopen and fclose
     //Matrix<double,StorageOrder::Rows> matrix;
     //matrix=matrix.read_market_matrix(filename); //here I read the matrix
@@ -59,11 +61,13 @@ int main(){
     
     //R.uncompress(); 
     //std::cout<<v[0]<<std::endl; //printing this here makes the whole code work: so it means the problem is in the matrix vec multiplication?
+    chrono_object.start();
     result=R*v; 
-    
+    chrono_object.stop();
+    //double time=chrono_object.wallTime();
+    std::cout<<chrono_object<<std::endl;
     //std::cout<<"R:\n"<<" "<<R(0,1)<<"\n"<<R(1,0)<<" "<<R(1,1)<<std::endl;
     //std::cout<<"R:\n"<<R(0,0)<<" "<<R(0,1)<<"\n"<<R(1,0)<<" "<<R(1,1)<<"\n"<<R(2,0)<<" "<<R(2,1)<<std::endl; 
     std::cout<<"matrix vector multiplication result: "<<result[0]<<" , "<<result[1]<<" "<<result[2]<<std::endl; //without printing "ok " program crashes here
-    R.resize(1,1);
     return 0;
 }
