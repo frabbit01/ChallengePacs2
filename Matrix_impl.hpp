@@ -218,6 +218,33 @@ namespace algebra{
         }
         return res;
     }
+
+    /*template<typename T,StorageOrder S>
+    std::vector<T> 
+    operator*(Matrix<T,StorageOrder::Rows> & M, std::Matrix<T,S> &v){
+        if(M.n_cols!=v.rows()||v.columns()>1){ //dimensions check
+                std::cerr<<"incompatible dimensions for matrix vector multiplication"<<std::endl;
+                return {};
+            }
+        
+        std::vector<T> res(M.n_rows,T(0));
+        if(M.compressed){
+            for(std::size_t i=0;i<M.n_rows;++i){
+                std::size_t n_elems=M.inner_indices[i+1], old_n_elems=M.inner_indices[i];
+                for(std::size_t k=old_n_elems;k<n_elems;++k){
+                    res[i]+=M.values[k]*v[M.outer_indices[k]];
+                }
+            }
+        }
+        else{
+            for(std::size_t i=0;i<M.n_rows;++i){
+                for(std::size_t j=0;j<M.n_cols;++j){
+                    res[i]+=M(i,j)*v[j];
+                }
+            }
+        }
+        return res;
+    }*/
     template<typename T,StorageOrder S>
     Matrix<T,StorageOrder::Rows> 
     Matrix<T,S>::read_market_matrix(const char * filename){

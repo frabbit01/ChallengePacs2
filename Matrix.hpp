@@ -49,6 +49,8 @@ namespace algebra{
             //Matrix* vector
             template<typename U>
             friend std::vector<U> operator * (Matrix<U,StorageOrder::Rows> & M, std::vector<U> &v);
+            //template<typename U,StorageOrder S>
+            //friend std::vector<U> operator * (Matrix<U,StorageOrder::Rows> & M, std::Matrix<U,S> &v);
         private:
             //Compressed format
             unsigned n_rows; //Initialized in the constructor (non default)
@@ -122,7 +124,9 @@ namespace algebra{
             Matrix<T,StorageOrder::Columns> read_market_matrix(const char * filename);
             //matrix*vector
             template<typename U>
-            friend std::vector<U> operator * (Matrix<U,StorageOrder::Columns> & M, std::vector<U> &v); //da implementare
+            friend std::vector<U> operator * (Matrix<U,StorageOrder::Columns> & M, std::vector<U> &v);
+            //template<typename U,StorageOrder S>
+            //friend std::vector<U> operator * (Matrix<U,StorageOrder::Columns> & M, std::Matrix<U,S> &v);
         private:
             //Compressed format
             unsigned n_rows; //Initialized in the constructor (non default)

@@ -20,8 +20,12 @@ int main(){
     for(std::size_t i=0;i<vector.size();++i){
         vector[i]=distr(engine);
     }
+    chrono_object.start();
     auto result=matrix*vector;
+    chrono_object.stop();
     std::cout<<result[0]<<std::endl;
+    std::cout<<"Time required for matrix vector multiplication"<<std::endl;
+    std::cout<<chrono_object<<std::endl;
     //matrix.compress();
     //matrix.uncompress();
     //matrix(131,131)=3; //sistemare questo errore
@@ -46,8 +50,12 @@ int main(){
     //matrix_columns.uncompress();
     //matrix_columns.resize(50,50);
     //std::cout<<matrix_columns(43,34)<<std::endl; 
+    chrono_object.start();
     result=matrix_columns*vector;
+    chrono_object.stop();
     std::cout<<result[0]<<std::endl;
+    std::cout<<"Time required for matrix vector multiplication"<<std::endl;
+    std::cout<<chrono_object<<std::endl;
     //std::cout<<"rows: "<<matrix_columns.rows()<<"\ncolumns: "<<matrix_columns.columns()<<"\nnon-zero elems: "<<matrix_columns.nnz()<<std::endl;
 
     //testing for matrix vector multiplication and with complex numbers
