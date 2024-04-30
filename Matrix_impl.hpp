@@ -221,12 +221,16 @@ namespace algebra{
 
     /*template<typename T,StorageOrder S>
     std::vector<T> 
-    operator*(Matrix<T,StorageOrder::Rows> & M, std::Matrix<T,S> &v){
-        if(M.n_cols!=v.rows()||v.columns()>1){ //dimensions check
+    operator*(Matrix<T,StorageOrder::Rows> & M, Matrix<T,S> &m){
+        if(M.n_cols!=v.rows()||m.columns()>1){ //dimensions check
                 std::cerr<<"incompatible dimensions for matrix vector multiplication"<<std::endl;
                 return {};
             }
-        
+        std::vector<T> v;
+        if(m.compressed())
+            v=m.get_values();
+        else
+            v=
         std::vector<T> res(M.n_rows,T(0));
         if(M.compressed){
             for(std::size_t i=0;i<M.n_rows;++i){
@@ -245,6 +249,8 @@ namespace algebra{
         }
         return res;
     }*/
+
+    
     template<typename T,StorageOrder S>
     Matrix<T,StorageOrder::Rows> 
     Matrix<T,S>::read_market_matrix(const char * filename){

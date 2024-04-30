@@ -26,6 +26,17 @@ int main(){
     std::cout<<result[0]<<std::endl;
     std::cout<<"Time required for matrix vector multiplication"<<std::endl;
     std::cout<<chrono_object<<std::endl;
+
+    std::vector<double> test_vector(matrix.columns());
+    for(std::size_t i=0;i<matrix.columns();++i){
+        test_vector[i]=1.0;
+    }
+    std::cout<<"test"<<std::endl;
+    auto test_product=matrix*test_vector;
+    for(std::size_t i=0;i<matrix.columns();++i){
+        std::cout<<test_product[i]<<" ";
+    }
+    std::cout<<std::endl;
     //matrix.compress();
     //matrix.uncompress();
     //matrix(131,131)=3; //sistemare questo errore
