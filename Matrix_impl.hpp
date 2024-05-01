@@ -219,18 +219,33 @@ namespace algebra{
         return res;
     }
 
-    /*template<typename T,StorageOrder S>
+    template<typename T,StorageOrder S>
     std::vector<T> 
     operator*(Matrix<T,StorageOrder::Rows> & M, Matrix<T,S> &m){
-        if(M.n_cols!=v.rows()||m.columns()>1){ //dimensions check
+        if(M.n_cols!=m.rows()||m.columns()>1){ //dimensions check
                 std::cerr<<"incompatible dimensions for matrix vector multiplication"<<std::endl;
                 return {};
             }
-        std::vector<T> v;
-        if(m.compressed())
-            v=m.get_values();
-        else
-            v=
+        std::vector<T> v(m.columns());
+        if(!m.compressed())
+            v=m.map_to_vec();
+        else{
+            if(m.inner_indices.size()==m.rows()){
+                
+                for(std::size_t i=0;i<v.size();++i){
+                    if(m.inner_indices[i+1]==m.inner_indices[i])
+                        v[i]=m.default_t;
+                    else{
+                        v[i]=m.values[m.inner_indices[i+1]];
+                    }
+                }
+            }
+            else{
+                for(std::size_t i=0;i<m.n_nnz;++i){
+                    v[m.outer_indices[i]]=m.values[i];
+                }
+            }
+        }
         std::vector<T> res(M.n_rows,T(0));
         if(M.compressed){
             for(std::size_t i=0;i<M.n_rows;++i){
@@ -248,7 +263,7 @@ namespace algebra{
             }
         }
         return res;
-    }*/
+    }
 
     
     template<typename T,StorageOrder S>

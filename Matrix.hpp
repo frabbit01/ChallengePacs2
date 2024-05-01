@@ -19,6 +19,15 @@ namespace algebra{
             std::vector<T> get_values() const {return values;}
             std::vector<std::size_t> get_inner_indices() const {return inner_indices;}
             std::vector<std::size_t> get_outer_indices() const {return outer_indices;}
+            std::vector<T> map_to_vec() const {
+                std::vector<T> res(COOmap.size());
+                unsigned i=0;
+                for(auto iter=COOmap.begin();iter!=COOmap.end();++iter){
+                    res[i]=iter->second;
+                    ++i;
+                }
+                return res;
+            }
             //setter
             void set_nnz(unsigned n){n_nnz=n;}
             //other methods
@@ -94,6 +103,15 @@ namespace algebra{
             std::vector<T> get_values() const {return values;}
             std::vector<std::size_t> get_inner_indices() const {return inner_indices;}
             std::vector<std::size_t> get_outer_indices() const {return outer_indices;}
+            std::vector<T> map_to_vec() const {
+                std::vector<T> res(COOmap.size());
+                unsigned i=0;
+                for(auto iter=COOmap.begin();iter!=COOmap.end();++iter){
+                    res[i]=iter->second;
+                    ++i;
+                }
+                return res;
+            }
             //setter
             void set_nnz(unsigned n){n_nnz=n;} //The only problem with this is that I have to call this manually, since I do not know whether the value after insertion is 0 or not
             //other methods
