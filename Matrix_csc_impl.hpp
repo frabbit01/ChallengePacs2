@@ -225,6 +225,7 @@ namespace algebra{
                 std::cerr<<"incompatible dimensions for matrix vector multiplication"<<std::endl;
                 return {};
             }
+        //I transform the matrix into a vector, then call the operator * that was previously defined
         std::vector<T> v(m.rows());
         if(!m.is_compressed())
             v=m.map_to_vec();
