@@ -12,7 +12,7 @@ namespace algebra{
     void
     Matrix<T,S>::resize(const unsigned & newrows, const unsigned &newcols){
         if(newrows>n_rows||newcols>n_cols){
-            std::cerr<<"The wished dimensions are bigger than the current ones"<<std::endl;
+            (*this)(newrows-1,newcols-1)=default_t;
             return;
         }
         if(!compressed){
@@ -128,7 +128,7 @@ namespace algebra{
     Matrix<T,S>::operator() (const std::size_t & i, const std::size_t &j) const{
         if(i>=n_rows||j>=n_cols){ //I check if I am within the matrix dimensions
             std::cerr<<"out of bounds"<<std::endl; 
-            return std::numeric_limits<T>::quiet_Nan();
+            return default_t; //I chose not to return a NaN to be more general
         }
         if(!compressed){
             std::array<std::size_t,2> key={i,j};

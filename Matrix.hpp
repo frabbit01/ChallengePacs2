@@ -39,7 +39,6 @@ namespace algebra{
             T & operator() (const std::size_t & _i, const std::size_t &_j); 
             //constructor
             Matrix()=default; //default constructor
-            //It is not necessary to specialize this constructor, for the CSC it is necessary to implement a new comparison operator
             Matrix(unsigned _n_rows,unsigned _n_cols):  //constructor that takes size of the matrix as input
             n_rows(_n_rows),n_cols(_n_cols),n_nnz(0),compressed(false),default_t(0){
                 T default_t;
@@ -124,7 +123,6 @@ namespace algebra{
             
             //constructor
             Matrix()=default; //default constructor
-            //It is not necessary to specialize this constructor, for the CSC it is necessary to implement a new comparison operator
             Matrix(unsigned _n_rows,unsigned _n_cols):  //constructor that takes size of the matrix as input
             n_rows(_n_rows),n_cols(_n_cols),n_nnz(0),compressed(false),default_t(0){
                 T default_t;
@@ -155,7 +153,6 @@ namespace algebra{
             std::vector<T> values; //I initialize this in the uncompress method; values vector
 
             //COOmap format
-            //std::map<std::array<std::size_t,2>,T,decltype(CompareKeysCSC)*> COOmap;
             std::map<std::array<std::size_t,2>,T,CompareKeysCSC> COOmap;
             //check for format
             bool compressed;

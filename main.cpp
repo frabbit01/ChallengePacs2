@@ -20,6 +20,8 @@ int main(){
     for(std::size_t i=0;i<vector.size();++i){
         vector[i]=distr(engine);
     }
+    //matrix.resize(200,200);
+    std::cout<<"rows: "<<matrix.rows()<<"\ncolumns: "<<matrix.columns()<<"\nnon-zero elems: "<<matrix.nnz()<<std::endl;
     matrix.compress();
     chrono_object.start();
     auto result=matrix*vector;

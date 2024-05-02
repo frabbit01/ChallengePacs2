@@ -12,7 +12,7 @@ namespace algebra{
     void
     Matrix<T,StorageOrder::Columns>::resize(const unsigned & newrows, const unsigned &newcols){
         if(newrows>n_rows||newcols>n_cols){
-            std::cerr<<"The wished dimensions are bigger than the current ones"<<std::endl;
+            (*this)(newrows-1,newcols-1)=default_t;
             return;
         }
         if(!compressed){
