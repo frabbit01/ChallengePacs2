@@ -20,6 +20,7 @@ int main(){
     for(std::size_t i=0;i<vector.size();++i){
         vector[i]=distr(engine);
     }
+    matrix.compress();
     chrono_object.start();
     auto result=matrix*vector;
     chrono_object.stop();
@@ -38,17 +39,15 @@ int main(){
     }
     std::cout<<std::endl;
 
-    Matrix<double,StorageOrder::Rows> test_matrix(matrix.columns(),1);
+    Matrix<double,StorageOrder::Columns> test_matrix(matrix.columns(),1);
     for(std::size_t i=0;i<matrix.columns();++i){
         test_matrix(i,0)=1.0;
     }
-    test_matrix.compress(); //goes into segmentation fault?
-    std::cout<<"test 2"<<std::endl;
-    auto test_product2=matrix*test_vector; //does not work when compressed
-    for(std::size_t i=0;i<matrix.columns();++i){
-        std::cout<<test_product2[i]<<" ";
-    }
-    std::cout<<std::endl;
+    std::cout<<test_matrix.nnz()<<std::endl;
+    test_matrix.set_nnz(matrix.columns());
+    
+    test_matrix.compress(); 
+    
     //matrix.compress();
     //matrix.uncompress();
     //matrix(131,131)=3; //sistemare questo errore
@@ -79,7 +78,12 @@ int main(){
     std::cout<<result[0]<<std::endl;
     std::cout<<"Time required for matrix vector multiplication"<<std::endl;
     std::cout<<chrono_object<<std::endl;
-
+    std::cout<<"test 2"<<std::endl;
+    auto test_product2=matrix*test_matrix; 
+    for(std::size_t i=0;i<matrix.columns();++i){
+        std::cout<<test_product2[i]<<" ";
+    }
+    std::cout<<std::endl;
     //std::cout<<"rows: "<<matrix_columns.rows()<<"\ncolumns: "<<matrix_columns.columns()<<"\nnon-zero elems: "<<matrix_columns.nnz()<<std::endl;
 
     //testing for matrix vector multiplication and with complex numbers

@@ -227,23 +227,25 @@ namespace algebra{
                 return {};
             }
         std::vector<T> v(m.columns());
-        if(!m.compressed())
+        if(!m.is_compressed())
             v=m.map_to_vec();
-        if(m.compressed())
-        {std::cout<<"I'm in"<<std::endl;
-            if(m.inner_indices.size()==m.rows()+1){
-                std::cout<<"got in"<<std::endl;
+        if(m.is_compressed())
+        {       auto m_values=m.get_values();
+                auto m_inner_indices=m.get_inner_indices();
+                auto m_outer_indices=m.get_outer_indices();
+            if(m_inner_indices.size()==m.rows()+1){
+                
                 for(std::size_t i=0;i<v.size();++i){
-                    if(m.inner_indices[i+1]==m.inner_indices[i])
-                        v[i]=m.default_t;
+                    if(m_inner_indices[i+1]==m_inner_indices[i])
+                        v[i]=M.default_t;
                     else{
-                        v[i]=m.values[m.inner_indices[i+1]];
+                        v[i]=m_values[m_inner_indices[i+1]];
                     }
                 }
             }
-            else if(m.inner_indices.size()==m.columns()+1){
-                for(std::size_t i=0;i<m.n_nnz;++i){
-                    v[m.outer_indices[i]]=m.values[i];
+            else if(m_inner_indices.size()==m.columns()+1){
+                for(std::size_t i=0;i<m.nnz();++i){
+                    v[m_outer_indices[i]]=m_values[i];
                 }
             }
         }
