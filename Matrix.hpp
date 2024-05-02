@@ -138,13 +138,13 @@ namespace algebra{
             //resize
             void resize(const unsigned & newrows, const unsigned &newcols); //check if it means to also get it bigger, implement if so is the case
 
-            //matrix reader!
+            //matrix reader
             Matrix<T,StorageOrder::Columns> read_market_matrix(const char * filename);
             //matrix*vector
             template<typename U>
             friend std::vector<U> operator * (Matrix<U,StorageOrder::Columns> & M, std::vector<U> &v);
-            //template<typename U,StorageOrder S>
-            //friend std::vector<U> operator * (Matrix<U,StorageOrder::Columns> & M, std::Matrix<U,S> &v);
+            template<typename U,StorageOrder K>
+            friend std::vector<U> operator * (Matrix<U,StorageOrder::Columns> & M, Matrix<U,K> &v);
         private:
             //Compressed format
             unsigned n_rows; //Initialized in the constructor (non default)

@@ -218,7 +218,42 @@ namespace algebra{
         }
         return res;
     }
-    //Since the matrix returned is in an uncompressed state, the code is almost identical to its counterpart for matrices stored row-wise
+    template<typename T,StorageOrder S>
+    std::vector<T> 
+    operator*(Matrix<T,StorageOrder::Columns> & M, Matrix<T,S> &m){
+        if(M.n_cols!=m.rows()||m.columns()>1){ //dimensions check
+                std::cerr<<"incompatible dimensions for matrix vector multiplication"<<std::endl;
+                return {};
+            }
+        std::vector<T> v(m.rows());
+        if(!m.is_compressed())
+            v=m.map_to_vec();
+        if(m.is_compressed())
+        {       auto m_values=m.get_values();
+                auto m_inner_indices=m.get_inner_indices();
+                auto m_outer_indices=m.get_outer_indices();
+            if(m_inner_indices.size()==m.rows()+1){
+                
+                for(std::size_t i=0;i<v.size();++i){
+                    if(m_inner_indices[i+1]==m_inner_indices[i]){
+                        
+                        v[i]=M.default_t;
+                    }
+                    else{
+                        v[i]=m_values[m_inner_indices[i+1]];
+                    }
+                }
+            }
+            else if(m_inner_indices.size()==m.columns()+1){
+                for(std::size_t i=0;i<m.nnz();++i){
+                    v[m_outer_indices[i]]=m_values[i];
+                }
+            }
+        }
+        
+        auto res=M*v;
+        return res;
+    }
     template<typename T>
     Matrix<T,StorageOrder::Columns> 
     Matrix<T,StorageOrder::Columns>::read_market_matrix(const char * filename){

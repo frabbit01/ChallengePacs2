@@ -39,18 +39,12 @@ int main(){
     }
     std::cout<<std::endl;
 
-    Matrix<double,StorageOrder::Rows> test_matrix(matrix.columns(),1);
+    Matrix<double,StorageOrder::Columns> test_matrix(matrix.columns(),1);
     for(std::size_t i=0;i<matrix.columns();++i){
         test_matrix(i,0)=1.0;
     }
     test_matrix.set_nnz(matrix.columns());
     test_matrix.compress();
-    std::cout<<"test 2"<<std::endl;
-    auto test_product2=matrix*test_matrix; 
-    for(std::size_t i=0;i<matrix.columns();++i){
-        std::cout<<test_product2[i]<<" ";
-    }
-    std::cout<<std::endl;
     
     
     //matrix.compress();
@@ -83,7 +77,12 @@ int main(){
     std::cout<<result[0]<<std::endl;
     std::cout<<"Time required for matrix vector multiplication"<<std::endl;
     std::cout<<chrono_object<<std::endl;
-    
+    std::cout<<"test2"<<std::endl;
+    auto test_product2=matrix*test_matrix; 
+    for(std::size_t i=0;i<matrix.columns();++i){
+        std::cout<<test_product2[i]<<" ";
+    }
+    std::cout<<std::endl;
     //std::cout<<"rows: "<<matrix_columns.rows()<<"\ncolumns: "<<matrix_columns.columns()<<"\nnon-zero elems: "<<matrix_columns.nnz()<<std::endl;
 
     //testing for matrix vector multiplication and with complex numbers

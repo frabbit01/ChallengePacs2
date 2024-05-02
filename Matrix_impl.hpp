@@ -226,7 +226,7 @@ namespace algebra{
                 std::cerr<<"incompatible dimensions for matrix vector multiplication"<<std::endl;
                 return {};
             }
-        std::vector<T> v(m.columns());
+        std::vector<T> v(m.rows());
         if(!m.is_compressed())
             v=m.map_to_vec();
         if(m.is_compressed())
@@ -236,8 +236,10 @@ namespace algebra{
             if(m_inner_indices.size()==m.rows()+1){
                 
                 for(std::size_t i=0;i<v.size();++i){
-                    if(m_inner_indices[i+1]==m_inner_indices[i])
+                    if(m_inner_indices[i+1]==m_inner_indices[i]){
+                        
                         v[i]=M.default_t;
+                    }
                     else{
                         v[i]=m_values[m_inner_indices[i+1]];
                     }
@@ -249,22 +251,7 @@ namespace algebra{
                 }
             }
         }
-        std::vector<T> res(M.n_rows,T(0));
-        if(M.compressed){
-            for(std::size_t i=0;i<M.n_rows;++i){
-                std::size_t n_elems=M.inner_indices[i+1], old_n_elems=M.inner_indices[i];
-                for(std::size_t k=old_n_elems;k<n_elems;++k){
-                    res[i]+=M.values[k]*v[M.outer_indices[k]];
-                }
-            }
-        }
-        else{
-            for(std::size_t i=0;i<M.n_rows;++i){
-                for(std::size_t j=0;j<M.n_cols;++j){
-                    res[i]+=M(i,j)*v[j];
-                }
-            }
-        }
+        auto res=M*v;
         return res;
     }
 
