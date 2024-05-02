@@ -229,9 +229,10 @@ namespace algebra{
         std::vector<T> v(m.columns());
         if(!m.compressed())
             v=m.map_to_vec();
-        else{
-            if(m.inner_indices.size()==m.rows()){
-                
+        if(m.compressed())
+        {std::cout<<"I'm in"<<std::endl;
+            if(m.inner_indices.size()==m.rows()+1){
+                std::cout<<"got in"<<std::endl;
                 for(std::size_t i=0;i<v.size();++i){
                     if(m.inner_indices[i+1]==m.inner_indices[i])
                         v[i]=m.default_t;
@@ -240,7 +241,7 @@ namespace algebra{
                     }
                 }
             }
-            else{
+            else if(m.inner_indices.size()==m.columns()+1){
                 for(std::size_t i=0;i<m.n_nnz;++i){
                     v[m.outer_indices[i]]=m.values[i];
                 }

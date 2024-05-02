@@ -165,7 +165,6 @@ namespace algebra{
     };
 }; //namespace algebra
 
-//extras: matric*matrix, chrono utility, norms
 
 //Implementation
 #include "Matrix_impl.hpp" //for StorageOrder::Rows
