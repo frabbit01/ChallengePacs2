@@ -31,6 +31,12 @@ namespace algebra{
      * 
      */
     enum class StorageOrder{Rows,Columns};
+    /**
+     * @brief Matrix template class that considers row ordered matrices as its default case. It can deal with both uncompressed matrices and with CSR matrices.
+     * 
+     * @tparam T type of the Matrix object elements
+     * @tparam S StorageOrder of the matrix (either StorageOrder::Rows or StorageOder::Columns)
+     */
     template<typename T,StorageOrder S=StorageOrder::Rows> class Matrix{
         public:
         /* GETTERS*/
@@ -172,7 +178,11 @@ namespace algebra{
         }
     };
     
-
+    /**
+     * @brief class specialization of the Matrix template class for column ordered matrices
+     * 
+     * @tparam T type of the matrix elements
+     */
     template<typename T> class Matrix<T,StorageOrder::Columns>{
         public:
             /*GETTERS*/
