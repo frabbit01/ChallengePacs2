@@ -1,12 +1,18 @@
-/** 
+/**
  * @file Matrix.hpp
+ * @author Francesca Visalli (frabbit01)
  * @brief Template Class Matrix and its specialization for column ordered matrices
  * In this file you will find the declaration of all the methods and members of the Matrix class. 
  * For their definitions take a look at Matrix_impl.hpp and Matrix_csc.hpp
  * 
  * Among the inclusions I included also a library published on the mnist site
-*/
-
+ * 
+ * @version 0.1
+ * @date 2024-05-03
+ * 
+ * @copyright Copyright (c) 2024
+ * 
+ */
 
 #ifndef MATRIX_HPP
 #define MATRIX_HPP
@@ -22,6 +28,7 @@ namespace algebra{
     enum class StorageOrder{Rows,Columns};
     template<typename T,StorageOrder S=StorageOrder::Rows> class Matrix{
         public:
+        /* GETTERS*/
             /// @brief Getter for the number of rows of the matrix
             /// @returns The private member n_rows
             unsigned rows() const {return n_rows;}
@@ -51,10 +58,11 @@ namespace algebra{
                 }
                 return res;
             }
-            
+            /*SETTER*/
             /// @brief Setter which allows the user to set a value for the private member n_nnz. Its call is recommended after an insertion, especially of a null element, to avoid undefined behaviour after compression
             void set_nnz(unsigned n){n_nnz=n;}
             
+            /*OTHER PUBLIC METHODS*/
             /// @brief Method that converts an uncompressed matrix into a compressed format (The default is CSR) by updating its private members
             void compress();
             /// @brief Method that converts an compressed matrix (CSR by default) into an  uncompressed format (ordered ny rows as default) by updating its private members
@@ -62,6 +70,7 @@ namespace algebra{
             /// @brief Method that checks the format of a matrix 
             /// @return The private member compressed
             bool is_compressed() const{return compressed;}
+            /*CALL OPERATOR*/
             /// @brief Call operator (const version)
             /// @param i Row index
             /// @param j Column index
@@ -72,9 +81,10 @@ namespace algebra{
             /// @param _j Column index
             /// @return A reference to the corresponding element of the matrix
             T & operator() (const std::size_t & _i, const std::size_t &_j); 
+            /*CONSTRUCTORS*/
             /// @brief Default constructor
             Matrix()=default;
-            /// @brief Constructor that initializes a matrix of zeros with the specified dimensions
+            /// @brief Constructor that initializes an uncompressed matrix of zeros with the specified dimensions
             /// @param _n_rows Desired number of rows
             /// @param _n_cols Desired number of columns
             Matrix(unsigned _n_rows,unsigned _n_cols): 
@@ -87,7 +97,7 @@ namespace algebra{
                     }
                 }
             } 
-            
+            /*OTHER PUBLIC METHODS*/
             /// @brief Method that resizes the matrix to have the desired dimensions
             /// @param newrows Desired number of rows
             /// @param newcols Desired number of columns
@@ -98,6 +108,7 @@ namespace algebra{
             /// @return A matrix in the uncompressed format 
             Matrix<T,StorageOrder::Rows> read_market_matrix(const char * filename); 
             
+            /*MATRIX VECTOR PRODUCT*/
             /// @brief Matrix-vector product (friend operator)
             /// @param M Matrix to be multiplied (row ordered)
             /// @param v Vector to be multiplied
@@ -130,7 +141,7 @@ namespace algebra{
     };
 
     /**
-     * @brief Class specialization for CSC format
+     * Class specialization for CSC format
      * 
      */
 
@@ -159,13 +170,28 @@ namespace algebra{
 
     template<typename T> class Matrix<T,StorageOrder::Columns>{
         public:
-            //getters
+            /*GETTERS*/
+            
+            /// @brief Getter for the number of rows of the matrix
+            /// @returns The private member n_rows
             unsigned rows() const {return n_rows;}
+            /// @brief Getter for the number of columns of the matrix
+            /// @returns The private member n_cols
             unsigned columns() const {return n_cols;}
+            /// @brief Getter for the number of non zero elements of the matrix
+            /// @returns The private member n_nnz
             unsigned nnz() const {return n_nnz;}
+            /// @brief Getter for the vector of values (not empty only if the matrix is in the compressed format)
+            /// @return A vector of size equal to the value of n_nnz containing the corresponding values
             std::vector<T> get_values() const {return values;}
+            /// @brief Getter for the vector of inner indices for a column ordered matrix; it has the size of n_cols+1 and contains the starting index for each column
+            /// @return The private member inner_indices (not empty only if the matrix is compressed)
             std::vector<std::size_t> get_inner_indices() const {return inner_indices;}
+            /// @brief Getter for the vector of outer indices for a column ordered matrix; it has the size of n_nz and contains the column index for each non zero element
+            /// @return The private member outer_indices (not empty only if the matrix is compressed)
             std::vector<std::size_t> get_outer_indices() const {return outer_indices;}
+            /// @brief Method that copies the COOmap member into a vector and returns it
+            /// @return The aforementioned vector 
             std::vector<T> map_to_vec() const {
                 std::vector<T> res(COOmap.size());
                 unsigned i=0;
@@ -175,18 +201,40 @@ namespace algebra{
                 }
                 return res;
             }
-            //setter
+            /*SETTER*/
+
+            /// @brief Setter which allows the user to set a value for the private member n_nnz. Its call is recommended after an insertion, especially of a null element, to avoid undefined behaviour after compression
             void set_nnz(unsigned n){n_nnz=n;} //The only problem with this is that I have to call this manually, since I do not know whether the value after insertion is 0 or not
-            //other methods
+            
+            /*OTHER PUBLIC METHODS*/
+            /// @brief Method that resizes the(column ordered) matrix to have the desired dimensions
+            /// @param newrows Desired number of rows
+            /// @param newcols Desired number of columns
             void compress();
+            /// @brief Method that converts an compressed matrix (CSC by default) into an  uncompressed format (ordered ny rows as default) by updating its private members
             void uncompress(); 
+            /// @brief Method that checks the format of a matrix 
+            /// @return The private member compressed
             bool is_compressed() const{return compressed;}
-            //call operator 
+
+            /*CALL OPERATOR*/
+            /// @brief Call operator (const version)
+            /// @param i Row index
+            /// @param j Column index
+            /// @return A const reference to the corresponding element of the matrix
             const T & operator() (const std::size_t & i, const std::size_t &j) const;
+            /// @brief Call operator (non const version). The user is not allowed to insert a value that exceeds the matrix dimensions when it is in the compressed state
+            /// @param _i Row index
+            /// @param _j Column index
+            /// @return A reference to the corresponding element of the matrix
             T & operator() (const std::size_t & _i, const std::size_t &_j); 
             
-            //constructor
-            Matrix()=default; //default constructor
+            /*CONSTRUCTORS*/
+            /// @brief Default constructor
+            Matrix()=default;
+            /// @brief Constructor that initializes an uncompressed column ordered matrix of zeros with the specified dimensions
+            /// @param _n_rows Desired number of rows
+            /// @param _n_cols Desired number of columns
             Matrix(unsigned _n_rows,unsigned _n_cols):  //constructor that takes size of the matrix as input
             n_rows(_n_rows),n_cols(_n_cols),n_nnz(0),compressed(false),default_t(0){
                 T default_t;
@@ -197,38 +245,55 @@ namespace algebra{
                     }
                 }
             } 
-            //resize
-            void resize(const unsigned & newrows, const unsigned &newcols); //check if it means to also get it bigger, implement if so is the case
 
-            //matrix reader
+            /*OTHER PUBLIC METHODS*/
+            /// @brief Method that resizes the matrix to have the desired dimensions
+            /// @param newrows Desired number of rows
+            /// @param newcols Desired number of columns
+            void resize(const unsigned & newrows, const unsigned &newcols); 
+
+            /// @brief Method that reads a matrix in a Matrix Market format
+            /// @param filename The name of the file from which the matrix will be read from 
+            /// @return A matrix in the uncompressed format 
             Matrix<T,StorageOrder::Columns> read_market_matrix(const char * filename);
-            //matrix*vector
+
+            /*MATRIX-VECTOR PRODUCT*/
+            /// @brief Matrix-vector product (friend operator)
+            /// @param M Matrix to be multiplied (column ordered)
+            /// @param v Vector to be multiplied
+            /// @return A vector (result of the operatrion)
             template<typename U>
             friend std::vector<U> operator * (Matrix<U,StorageOrder::Columns> & M, std::vector<U> &v);
+            /// @brief Matrix-vector product (friend operator)
+            /// @param M Matrix to be multiplied (column ordered)
+            /// @param m A matrix having only one column to be multiplied
+            /// @return A vector (result of the operatrion)
             template<typename U,StorageOrder K>
             friend std::vector<U> operator * (Matrix<U,StorageOrder::Columns> & M, Matrix<U,K> &v);
         private:
-            //Compressed format
-            unsigned n_rows; //Initialized in the constructor (non default)
-            unsigned n_cols; //Initialized in the constructor (non default)
-            unsigned n_nnz; //I want to update this every time I use the call operator or resize the matrix in any way
-            std::vector<std::size_t> inner_indices; //I initialize this in the uncompress method; starting index for the element of each column
-            std::vector<std::size_t> outer_indices; //I initialize this in the uncompress method; corresponding row idxs
-            std::vector<T> values; //I initialize this in the uncompress method; values vector
+            ///Compressed format
+            unsigned n_rows; ///Initialized in the constructor (non default)
+            unsigned n_cols; ///Initialized in the constructor (non default)
+            unsigned n_nnz; ///I want to update this every time I use the call operator or resize the matrix in any way
+            std::vector<std::size_t> inner_indices; ///I initialize this in the uncompress method; starting index for the element of each column
+            std::vector<std::size_t> outer_indices; ///I initialize this in the uncompress method; corresponding row idxs
+            std::vector<T> values; ///I initialize this in the uncompress method; values vector
 
-            //COOmap format
+            ///COOmap format
             std::map<std::array<std::size_t,2>,T,CompareKeysCSC> COOmap;
-            //check for format
+            ///check for format
             bool compressed;
 
-            //default value
+            ///default value
             T default_t=0;
     };
 }; ///namespace algebra
 
 
-//Implementation
-#include "Matrix_impl.hpp" //for StorageOrder::Rows
-#include "Matrix_csc_impl.hpp" //for StorageOrder::Columns
+/**
+ * Implementation of the methods declared in this file
+ */
+#include "Matrix_impl.hpp" ///for StorageOrder::Rows
+#include "Matrix_csc_impl.hpp" ///for StorageOrder::Columns
 
 #endif /*MATRIX_HPP*/
