@@ -25,6 +25,11 @@
 #include<fstream>
 #include<string>
 namespace algebra{
+    /**
+     * @brief Enumerated class that defines the ordainement of a Matrix object
+     * enumerator list is {Rows, Columns}
+     * 
+     */
     enum class StorageOrder{Rows,Columns};
     template<typename T,StorageOrder S=StorageOrder::Rows> class Matrix{
         public:

@@ -1,6 +1,15 @@
+/**
+ * @file main.cpp
+ * @author Francesca Visalli
+ * @brief main() function made to test the implementation by reading a matrix in matrix market format from a file
+ * @version 0.1
+ * @date 2024-05-03
+ * 
+ * @copyright Copyright (c) 2024
+ * 
+ */
 #include "Matrix.hpp"
 #include<iostream>
-//I write a main to test my implementation
 #include<fstream>
 #include<string>
 #include<complex>

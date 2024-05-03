@@ -1,12 +1,24 @@
+/**
+ * @file Matrix_impl.hpp
+ * @author Francesca Visalli (frabbit01)
+ * @brief implemenation of Matrix class methods (thought for the default case of row ordered matrices)
+ * @version 0.1
+ * @date 2024-05-03
+ * 
+ * @copyright Copyright (c) 2024
+ * 
+ */
 #ifndef MATRIX_IMPL_HPP
 #define MATRIX_IMPL_HPP
 
-//implemenation of Matrix class methods 
+
 #include "Matrix.hpp"
 #include<utility>
 #include<limits>
 #include<algorithm>
 #include "mmio.hpp"
+
+
 namespace algebra{
     template<typename T,StorageOrder S>
     void

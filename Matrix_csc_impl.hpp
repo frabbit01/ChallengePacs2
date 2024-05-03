@@ -1,7 +1,17 @@
+/**
+ * @file Matrix_csc_impl.hpp
+ * @author Francesca Visalli (frabbit01)
+ * @brief Implementation of methods for the specialization of Matrix class for column ordered matrices
+ * @version 0.1
+ * @date 2024-05-03
+ * 
+ * @copyright Copyright (c) 2024
+ * 
+ */
+
 #ifndef MATRIX_CSC_IMPL_HPP
 #define MATRIX_CSC_IMPL_HPP
 
-//implemenation of specialization of Matrix class methods 
 #include "Matrix.hpp"
 #include<utility>
 #include<limits>
