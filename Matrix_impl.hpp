@@ -33,22 +33,22 @@ namespace algebra{
                     if(i>=newrows||j>=newcols){
                         std::array<std::size_t,2> key={i,j};
                         if(COOmap[key]!=default_t)
-                            --n_nnz; //If the element is not of the default value I decrease the number of non zero elements
-                        COOmap.erase(key); //I erase the elements out of range for the new dimensions
+                            --n_nnz; ///If the element is not of the default value I decrease the number of non zero elements
+                        COOmap.erase(key); ///I erase the elements out of range for the new dimensions
                     }
                 }
             }
         }
         else{
-            std::size_t diff=n_nnz-inner_indices[newrows]; //number of elements to erase
-            auto last=outer_indices.end(); //I delete the outer indices corresponding to the non zero elements to erase
+            std::size_t diff=n_nnz-inner_indices[newrows]; ///number of elements to erase
+            auto last=outer_indices.end(); ///I delete the outer indices corresponding to the non zero elements to erase
             auto first=last-diff;
             outer_indices.erase(first,last);
-            auto lastv=values.end(); //I delete the values corresponding to the non zero elements to erase
+            auto lastv=values.end(); ///I delete the values corresponding to the non zero elements to erase
             auto firstv=lastv-diff;
             values.erase(firstv,lastv);
             n_nnz-=diff;
-            auto last_i=inner_indices.end(); //I delete the inner indices corresponding to the deleted rows
+            auto last_i=inner_indices.end(); ///I delete the inner indices corresponding to the deleted rows
             auto first_i=last_i-(n_rows-newrows);
             inner_indices.erase(first_i,last_i);
             std::size_t actual_size=outer_indices.size();
@@ -58,7 +58,7 @@ namespace algebra{
                 auto itero=outer_indices.begin();
                 if(outer_indices[pos]>=newcols){
                     --n_nnz;
-                    for(std::size_t k=0;k<inner_indices.size();++k){ //I adjust the indices
+                    for(std::size_t k=0;k<inner_indices.size();++k){ ///I adjust the indices
                         if(pos<=inner_indices[k]&&k>0){
                             --inner_indices[k];
                         }
@@ -71,7 +71,7 @@ namespace algebra{
                 ++pos;
             }
         }
-        //I update the dimensions
+        ///I update the dimensions
         n_rows=newrows;
         n_cols=newcols;
     }
@@ -79,47 +79,47 @@ namespace algebra{
     template<typename T,StorageOrder S>
     void
     Matrix<T,S>::compress(){
-        if(compressed) //If the matrix is already compressed I exit the function
+        if(compressed) ///If the matrix is already compressed I exit the function
             return;
         inner_indices=std::vector<std::size_t>(n_rows+1);
         outer_indices=std::vector<std::size_t>(n_nnz);
         values=std::vector<T>(n_nnz);
         std::size_t count=0,i=0,row=0;
-        bool start_row=true;//flag to check when the first non null element of a row is
+        bool start_row=true;///flag to check when the first non null element of a row is
         for(auto iter=COOmap.begin();iter!=COOmap.end();++iter){
-            if(iter->first[0]!=row){ //I reset the flag when I go to the next row in the matrix
+            if(iter->first[0]!=row){ ///I reset the flag when I go to the next row in the matrix
                 start_row=false;
                 ++row;
             }
             if(iter->second!=default_t){
-                values[i]=iter->second;//store nnz value
+                values[i]=iter->second;///store nnz value
                 outer_indices[i]=iter->first[1];//store column index
                 ++i;
-                if(!start_row){//when the row has the first non zero element
-                    inner_indices[row]=count; //store the number of non zero elements before reaching this element
+                if(!start_row){///when the row has the first non zero element
+                    inner_indices[row]=count; ///store the number of non zero elements before reaching this element
                     start_row=true;
                 }
-                ++count; //I count the non-zero elements
+                ++count; ///I count the non-zero elements
             }
             inner_indices[row+1]=count;
         }
-        COOmap.clear(); //I clear the map for the COOmap format
+        COOmap.clear(); ///I clear the map for the COOmap format
         compressed=true;
     }
 
     template<typename T,StorageOrder S>
     void
     Matrix<T,S>::uncompress(){
-        if(!compressed) //If already uncompressed I exit
+        if(!compressed) ///If already uncompressed I exit
             return;
-        //I start by creating a map of the right length
+        ///I start by creating a map of the right length
         for(std::size_t i=0;i<n_rows;++i){
             for(std::size_t j=0;j<n_cols;++j){
                 std::array<std::size_t,2> key={i,j};
                 COOmap[key]=default_t;
             }
         }
-        unsigned row=0; //here I keep track of what row I am at
+        unsigned row=0; ///here I keep track of what row I am at
         unsigned counter=inner_indices[row+1]; //this helps me keep track of when I need to update the row index
         for(std::size_t k=0;k<n_nnz;++k){
             if(k==counter&&row<n_rows){
@@ -129,7 +129,7 @@ namespace algebra{
             std::array<std::size_t,2> key={row,outer_indices[k]};
             COOmap[key]=values[k];
         }
-        //clear the vectors
+        ///clear the vectors
         values.clear();
         outer_indices.clear();
         inner_indices.clear();
@@ -138,9 +138,9 @@ namespace algebra{
     template<typename T,StorageOrder S>
     const T & 
     Matrix<T,S>::operator() (const std::size_t & i, const std::size_t &j) const{
-        if(i>=n_rows||j>=n_cols){ //I check if I am within the matrix dimensions
+        if(i>=n_rows||j>=n_cols){ ///I check if I am within the matrix dimensions
             std::cerr<<"out of bounds"<<std::endl; 
-            return default_t; //I chose not to return a NaN to be more general
+            return default_t; ///I chose not to return a quietNaN to be more general
         }
         if(!compressed){
             std::array<std::size_t,2> key={i,j};
@@ -150,40 +150,39 @@ namespace algebra{
         unsigned n1=inner_indices[i],n2=n_nnz;
         if(i<n_rows)
             n2=inner_indices[i+1];
-        for(std::size_t k=n1;k<n2;++k){//I am cycling through the non null elements of the row
+        for(std::size_t k=n1;k<n2;++k){///I am cycling through the non null elements of the row
             if(outer_indices[k]==j)
-                return values[k]; //If the element is non null I return it
+                return values[k]; ///If the element is non null I return it
         }
-        return 0; //If the element is null I return the default value
+        return 0; ///If the element is null I return the default value
     }
 
     template<typename T,StorageOrder S>
     T & 
     Matrix<T,S>::operator() (const std::size_t & _i, const std::size_t &_j) {
-        if(compressed &&(_i>=n_rows||_j>=n_cols)){ //If the user tries to add a new element when the matrix is in a compressed state, return an error
+        if(compressed &&(_i>=n_rows||_j>=n_cols)){ ///If the user tries to add a new element when the matrix is in a compressed state, return an error
             std::cerr<<"You cannot add new elements when the matrix is in a compressed state"<<std::endl;
-            //return std::numeric_limits<T>::quiet_Nan();
             return default_t;
         }
         if(compressed){
             unsigned n1=inner_indices[_i],n2=n_nnz;
-            if(_i<n_rows&&inner_indices[_i+1]<n_nnz)//just to be safe
+            if(_i<n_rows&&inner_indices[_i+1]<n_nnz)///just to be safe
                 n2=inner_indices[_i+1];
-            for(std::size_t k=n1;k<n2;++k){//I am cycling through the non null elements of the row
+            for(std::size_t k=n1;k<n2;++k){///I am cycling through the non null elements of the row
                 if(outer_indices[k]==_j){
-                    return values[k]; //If the element is non null I return it
+                    return values[k]; ///If the element is non null I return it
                 }
             }
-            return default_t; //If I get a zero element return a default value for T
+            return default_t; ///If I get a zero element return a default value for T
         }
         if(_i<n_rows&&_j<n_cols){
             std::array<std::size_t,2> key={_i,_j};
             return COOmap[key];
         }
-        //if the element is not within bounds I have to adjust the matrix dimensions
+        ///if the element is not within bounds I have to adjust the matrix dimensions
         std::size_t g=0;
         auto n_rows_to_add=std::max((_i+1)-n_rows,g), n_cols_to_add=std::max(_j+1-n_cols,g);
-        //I insert a default value for T to make the matrix have enough rows and columns to be rectangular after inserting the new element
+        ///I insert a default value for T to make the matrix have enough rows and columns to be rectangular after inserting the new element
         if(n_cols_to_add>0){
             for(std::size_t i=0;i<n_rows;++i){
                 for(std::size_t j=n_cols-1;j<n_cols+n_cols_to_add;++j){
@@ -198,17 +197,24 @@ namespace algebra{
                 }
             }
         }
-        //i fix the matrix dimensions
+        ///i fix the matrix dimensions
         n_rows+=n_rows_to_add;
         n_cols+=n_cols_to_add;
 
-        return COOmap[{_i,_j}]; //I return a reference to the new element
+        return COOmap[{_i,_j}]; ///I return a reference to the new element
     }
-
+    /**
+     * @brief friend operator that performs matrix-vector multiplication
+     * 
+     * @tparam T type of the elements of the matrix (and vector)
+     * @param M row ordered matrix
+     * @param v vector of type T
+     * @return std::vector<T> result of the multiplication
+     */
     template<typename T>
     std::vector<T> 
     operator*(Matrix<T,StorageOrder::Rows> & M, std::vector<T> &v){
-        if(M.n_cols!=v.size()){ //dimensions check
+        if(M.n_cols!=v.size()){ ///dimensions check
                 std::cerr<<"incompatible dimensions for matrix vector multiplication"<<std::endl;
                 return {};
             }
@@ -230,15 +236,23 @@ namespace algebra{
         }
         return res;
     }
-
+    /**
+     * @brief friend operator that performs matrix-vector multiplication
+     * 
+     * @tparam T type of the elements of the matrices 
+     * @tparam S Can be either StorageOrder::Rows or StorageOrder::Columns
+     * @param M row ordered matrix
+     * @param m 1-column matrix
+     * @return std::vector<T> resukt of the multiplication
+     */
     template<typename T,StorageOrder S>
     std::vector<T> 
     operator*(Matrix<T,StorageOrder::Rows> & M, Matrix<T,S> &m){
-        if(M.n_cols!=m.rows()||m.columns()>1){ //dimensions check
+        if(M.n_cols!=m.rows()||m.columns()>1){ ///dimensions check
                 std::cerr<<"incompatible dimensions for matrix vector multiplication"<<std::endl;
                 return {};
             }
-        //I transform the matrix into a vector, then call the operator * that was previously defined
+        ///I transform the matrix into a vector, then call the operator * that was previously defined
         std::vector<T> v(m.rows());
         if(!m.is_compressed())
             v=m.map_to_vec();
@@ -277,33 +291,33 @@ namespace algebra{
         FILE *f;
         int rows,cols,nnz;
         f=std::fopen(filename,"r");
-        if(!f){ //check if the file has opened correctly
+        if(!f){ ///check if the file has opened correctly
             std::cerr<<"file opening has failed"<<std::endl;
             return Matrix<T,StorageOrder::Rows>();
         }
-        if(mm_read_banner(f,&matcode)!=0){ //check if the banner has been successfully read
+        if(mm_read_banner(f,&matcode)!=0){ ///check if the banner has been successfully read
             std::cerr<<"Matrix banner was not read successfully"<<std::endl;
             return Matrix<T,StorageOrder::Rows>();
         }
-        if(!mm_is_matrix(matcode)||!mm_is_real(matcode)){//check if the matrix is a general real matrix
+        if(!mm_is_matrix(matcode)||!mm_is_real(matcode)){///check if the matrix is a general real matrix
             std::cerr<<"This program only works with general real matrices"<<std::endl;
             return Matrix<T,StorageOrder::Rows>();
         }
-        if(mm_read_mtx_crd_size(f,&rows,&cols,&nnz)!=0){ //check if the dimensions have been all read correctly
+        if(mm_read_mtx_crd_size(f,&rows,&cols,&nnz)!=0){ ///check if the dimensions have been all read correctly
             std::cerr<<"The sizes were not read correctly"<<std::endl;
             return Matrix<T,StorageOrder::Rows>();
         }
-        //I call the constructor
+        ///I call the constructor
         Matrix<T,StorageOrder::Rows> result(rows,cols);
         result.set_nnz(nnz);
-        //I insert the non zero values in the matrix
+        ///I insert the non zero values in the matrix
         for(std::size_t k=0;k<nnz;++k){
             std::size_t i,j;
             T value;
             fscanf(f,"%ld %ld %lg\n",&i,&j,&value);
-            result(i-1,j-1)=value; //It has to be considered that now the indices have to start from 0
+            result(i-1,j-1)=value; ///It has to be considered that now the indices have to start from 0
         }
-        //I close the file
+        ///I close the file
         if(f!=stdin)
             fclose(f);
         return result;
