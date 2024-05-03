@@ -1,3 +1,13 @@
+/** 
+ * @file Matrix.hpp
+ * @brief Template Class Matrix and its specialization for column ordered matrices
+ * In this file you will find the declaration of all the methods and members of the Matrix class. 
+ * For their definitions take a look at Matrix_impl.hpp and Matrix_csc.hpp
+ * 
+ * Among the inclusions I included also a library published on the mnist site
+*/
+
+
 #ifndef MATRIX_HPP
 #define MATRIX_HPP
 
@@ -101,29 +111,42 @@ namespace algebra{
             template<typename U,StorageOrder K>
             friend std::vector<U> operator * (Matrix<U,StorageOrder::Rows> & M, Matrix<U,K> &m);
         private:
-            //Compressed format
-            unsigned n_rows; //Initialized in the constructor (non default)
-            unsigned n_cols; //Initialized in the constructor (non default)
-            unsigned n_nnz=0; //I want to update this every time I use the call operator or resize the matrix in any way
-            std::vector<std::size_t> inner_indices; //I initialize this in the compress method; starting index for the element of each row
-            std::vector<std::size_t> outer_indices; //I initialize this in the compress method; corresponding column idxs
-            std::vector<T> values; //I initialize this in the compress method; values vector
+            /// Compressed format
+            unsigned n_rows; /// Initialized in the constructor (non default)
+            unsigned n_cols; /// Initialized in the constructor (non default)
+            unsigned n_nnz=0; /// I want to update this every time I use the call operator or resize the matrix in any way
+            std::vector<std::size_t> inner_indices; /// I initialize this in the compress method; starting index for the element of each row
+            std::vector<std::size_t> outer_indices; /// I initialize this in the compress method; corresponding column idxs
+            std::vector<T> values; /// I initialize this in the compress method; values vector
 
-            //COOmap format
+            ///COOmap format
             std::map<std::array<std::size_t,2>,T> COOmap;
 
-            //check for format
+            ///check for format
             bool compressed;
 
-            //member i use to return 0 element 
+            ///member I use to return 0 element for any type T
             T default_t= 0;
     };
 
-    ///////////////////////////////////////////////////////////////////////////////
-    //class specialization for CSC format
+    /**
+     * @brief Class specialization for CSC format
+     * 
+     */
 
-    //I define a comparator to give as parameter for the private member COOmap for the matrix to be column ordered
+    /**
+     * @brief Struct that contains a new comparator for the COOmap member
+     * 
+     */
     struct CompareKeysCSC {
+        /**
+         * @brief Comparator between arrays of two sixe_t elements for column ordered matrices
+         * 
+         * @param lhs First array to be compared
+         * @param rhs Second array to be compared
+         * @return true when either the second element of the first array is less than the second element of rhs or when they're equal but the first element of lhs is smaller then the second element of rhs 
+         * @return false otherwise
+         */
         bool operator()(const std::array<std::size_t, 2>& lhs, const std::array<std::size_t, 2>& rhs) const {
             if (lhs[1] < rhs[1])
                 return true;
@@ -201,7 +224,7 @@ namespace algebra{
             //default value
             T default_t=0;
     };
-}; //namespace algebra
+}; ///namespace algebra
 
 
 //Implementation
