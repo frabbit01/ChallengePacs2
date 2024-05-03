@@ -284,7 +284,7 @@ namespace algebra{
             /// @param m A matrix having only one column to be multiplied
             /// @return A vector (result of the operatrion)
             template<typename U,StorageOrder K>
-            friend std::vector<U> operator * (Matrix<U,StorageOrder::Columns> & M, Matrix<U,K> &v);
+            friend std::vector<U> operator * (Matrix<U,StorageOrder::Columns> & M, Matrix<U,K> &m);
         private:
             ///Compressed format
             unsigned n_rows; ///Initialized in the constructor (non default)

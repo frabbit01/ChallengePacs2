@@ -237,7 +237,7 @@ namespace algebra{
     /**
      * @brief friend operator that performs matrix vector multiplication
      * 
-     * @tparam T 
+     * @tparam T type of the matrices elements
      * @tparam S STorageOrder instance (can be either StorageOrder::Rows or StorageOrder::Columns)
      * @param M column ordered matrix
      * @param m 1-column matrix

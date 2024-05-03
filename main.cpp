@@ -1,7 +1,7 @@
 /**
  * @file main.cpp
  * @author Francesca Visalli
- * @brief main() function made to test the implementation by reading a matrix in matrix market format from a file
+ * @brief File that contains int main() function made to test the implementation by reading a matrix in matrix market format from a file
  * @version 0.1
  * @date 2024-05-03
  * 
@@ -16,6 +16,11 @@
 #include<chrono.hpp>
 #include <random>
 using namespace algebra;
+/**
+ * @brief main function to test the implementation
+ * 
+ * @return int 0
+ */
 int main(){
     Timings::Chrono chrono_object;
     std::default_random_engine engine{42};
