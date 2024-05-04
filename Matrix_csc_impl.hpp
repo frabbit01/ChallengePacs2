@@ -161,7 +161,7 @@ namespace algebra{
     Matrix<T,StorageOrder::Columns>::operator() (const std::size_t & _i, const std::size_t &_j) {
         if(compressed &&(_i>=n_rows||_j>=n_cols)){ ///If the user tries to add a new element when the matrix is in a compressed state, return an error
             std::cerr<<"You cannot add new elements when the matrix is in a compressed state"<<std::endl;
-ì            return default_t;
+            return default_t;
         }
         if(compressed){
             unsigned n1=inner_indices[_j],n2=n_nnz;
