@@ -27,3 +27,6 @@ Definitions for the mmio library.
 -main.cpp:
 File that tests the implementation. It also includes the utility chrono that allows the user to time the implementation and print the elapsed time. In this case it was used to time the matrix vector product in the uncompressed case and compressed case.
 There is also an example of the implementation applied to complex numbers.
+
+-Doxyfile and the Doxygen directory:
+The Doxyfile includes settings for the documentation files, such as the output directory for doxygen, whereas the directory contains the documentation for this project.
