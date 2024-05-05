@@ -1,0 +1,6 @@
+<map id="Matrix.hpp" name="Matrix.hpp">
+<area shape="rect" id="node1" title="Template Class Matrix and its specialization for column ordered matrices In this file you will find t..." alt="" coords="145,5,237,32"/>
+<area shape="rect" id="node2" href="$main_8cpp.html" title="File that contains int main() function made to test the implementation by reading a matrix in matrix ..." alt="" coords="5,80,88,107"/>
+<area shape="rect" id="node3" href="$Matrix__csc__impl_8hpp.html" title="Implementation of methods for the specialization of Matrix class for column ordered matrices." alt="" coords="113,80,269,107"/>
+<area shape="rect" id="node4" href="$Matrix__impl_8hpp.html" title="implemenation of Matrix class methods (thought for the default case of row ordered matrices)" alt="" coords="293,80,421,107"/>
+</map>

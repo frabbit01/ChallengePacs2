@@ -1,0 +1,438 @@
+\hypertarget{classalgebra_1_1Matrix}{}\doxysection{algebra\+::Matrix$<$ T, S $>$ Class Template Reference}
+\label{classalgebra_1_1Matrix}\index{algebra::Matrix$<$ T, S $>$@{algebra::Matrix$<$ T, S $>$}}
+
+
+\mbox{\hyperlink{classalgebra_1_1Matrix}{Matrix}} template class that considers row ordered matrices as its default case. It can deal with both uncompressed matrices and with CSR matrices.  
+
+
+
+
+{\ttfamily \#include $<$Matrix.\+hpp$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+unsigned \mbox{\hyperlink{classalgebra_1_1Matrix_a8112eabe32b213a52b4d5119a96deae0}{rows}} () const
+\begin{DoxyCompactList}\small\item\em Getter for the number of rows of the matrix. \end{DoxyCompactList}\item 
+unsigned \mbox{\hyperlink{classalgebra_1_1Matrix_a64d1ed3009a58f66d695c58497492fdb}{columns}} () const
+\begin{DoxyCompactList}\small\item\em Getter for the number of columns of the matrix. \end{DoxyCompactList}\item 
+unsigned \mbox{\hyperlink{classalgebra_1_1Matrix_a183ce46767bd18a9faf4eeecbbfff697}{nnz}} () const
+\begin{DoxyCompactList}\small\item\em Getter for the number of non zero elements of the matrix. \end{DoxyCompactList}\item 
+std\+::vector$<$ T $>$ \mbox{\hyperlink{classalgebra_1_1Matrix_aab236d08b9b66b4397c99a5ed1660c07}{get\+\_\+values}} () const
+\begin{DoxyCompactList}\small\item\em Getter for the vector of values (not empty only if the matrix is in the compressed format) \end{DoxyCompactList}\item 
+std\+::vector$<$ std\+::size\+\_\+t $>$ \mbox{\hyperlink{classalgebra_1_1Matrix_a779259a8e0839cd5480a00f97cb4f233}{get\+\_\+inner\+\_\+indices}} () const
+\begin{DoxyCompactList}\small\item\em Getter for the vector of inner indices, in the default case of a matrix ordered by rows it has the size of n\+\_\+rows+1 and contains the starting index for each row. \end{DoxyCompactList}\item 
+std\+::vector$<$ std\+::size\+\_\+t $>$ \mbox{\hyperlink{classalgebra_1_1Matrix_a98d913709713ee44a5f432b7125503d2}{get\+\_\+outer\+\_\+indices}} () const
+\begin{DoxyCompactList}\small\item\em Getter for the vector of outer indices of the matrix. In the default case of a matrix ordered by rows it contains the column index corresponding to each non zero value. \end{DoxyCompactList}\item 
+std\+::vector$<$ T $>$ \mbox{\hyperlink{classalgebra_1_1Matrix_aa5694b988e62b0e496d3c48ca8042d6a}{map\+\_\+to\+\_\+vec}} () const
+\begin{DoxyCompactList}\small\item\em Method that copies the COOmap member into a vector and returns it. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classalgebra_1_1Matrix_a451ea00a2cdd967ddfa8ab625931a2cd}\label{classalgebra_1_1Matrix_a451ea00a2cdd967ddfa8ab625931a2cd}} 
+void \mbox{\hyperlink{classalgebra_1_1Matrix_a451ea00a2cdd967ddfa8ab625931a2cd}{set\+\_\+nnz}} (unsigned n)
+\begin{DoxyCompactList}\small\item\em Setter which allows the user to set a value for the private member n\+\_\+nnz. Its call is recommended after an insertion, especially of a null element, to avoid undefined behaviour after compression. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classalgebra_1_1Matrix_ae6b0818ff1d5703d067698c78d2cac41}{compress}} ()
+\begin{DoxyCompactList}\small\item\em Method that converts an uncompressed matrix into a compressed format (The default is CSR) by updating its private members. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classalgebra_1_1Matrix_a9ce310a73e7999f9f3068ec8833ce811}{uncompress}} ()
+\begin{DoxyCompactList}\small\item\em Method that converts an compressed matrix (CSR by default) into an uncompressed format (ordered ny rows as default) by updating its private members. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classalgebra_1_1Matrix_a8889930e0702930ccec966238c5960b6}{is\+\_\+compressed}} () const
+\begin{DoxyCompactList}\small\item\em Method that checks the format of a matrix. \end{DoxyCompactList}\item 
+const T \& \mbox{\hyperlink{classalgebra_1_1Matrix_a32ad14e11f526d51098a7ffd517bd219}{operator()}} (const std\+::size\+\_\+t \&i, const std\+::size\+\_\+t \&j) const
+\begin{DoxyCompactList}\small\item\em Call operator (const version) \end{DoxyCompactList}\item 
+T \& \mbox{\hyperlink{classalgebra_1_1Matrix_a763ef87bc50aa62e0db088c9cfe1ebd1}{operator()}} (const std\+::size\+\_\+t \&\+\_\+i, const std\+::size\+\_\+t \&\+\_\+j)
+\begin{DoxyCompactList}\small\item\em Call operator (non const version). The user is not allowed to insert a value that exceeds the matrix dimensions when it is in the compressed state. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classalgebra_1_1Matrix_aa2cb846317f57663c56ab9aa31b3fce1}\label{classalgebra_1_1Matrix_aa2cb846317f57663c56ab9aa31b3fce1}} 
+\mbox{\hyperlink{classalgebra_1_1Matrix_aa2cb846317f57663c56ab9aa31b3fce1}{Matrix}} ()=default
+\begin{DoxyCompactList}\small\item\em Default constructor. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classalgebra_1_1Matrix_a1d1d4e89cddb5cb494e8679bf1a7ba71}{Matrix}} (unsigned \+\_\+n\+\_\+rows, unsigned \+\_\+n\+\_\+cols)
+\begin{DoxyCompactList}\small\item\em Constructor that initializes an uncompressed matrix of zeros with the specified dimensions. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classalgebra_1_1Matrix_a44a5df26a696c80f3d1870f592d6e560}{resize}} (const unsigned \&newrows, const unsigned \&newcols)
+\begin{DoxyCompactList}\small\item\em Method that resizes the matrix to have the desired dimensions. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classalgebra_1_1Matrix}{Matrix}}$<$ T, Storage\+Order\+::\+Rows $>$ \mbox{\hyperlink{classalgebra_1_1Matrix_a10289cf1140acf4c12282542d9e35c59}{read\+\_\+market\+\_\+matrix}} (const char $\ast$filename)
+\begin{DoxyCompactList}\small\item\em Method that reads a matrix in a \mbox{\hyperlink{classalgebra_1_1Matrix}{Matrix}} Market format. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$typename U $>$ }\\std\+::vector$<$ U $>$ \mbox{\hyperlink{classalgebra_1_1Matrix_ae2a6cb2bbe15155e2fbc1db9497c62fe}{operator$\ast$}} (\mbox{\hyperlink{classalgebra_1_1Matrix}{Matrix}}$<$ U, Storage\+Order\+::\+Rows $>$ \&M, std\+::vector$<$ U $>$ \&v)
+\begin{DoxyCompactList}\small\item\em Matrix-\/vector product (friend operator) \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename U , Storage\+Order K$>$ }\\std\+::vector$<$ U $>$ \mbox{\hyperlink{classalgebra_1_1Matrix_ac95b082e5e33cafd1a519aec0f80e9d4}{operator$\ast$}} (\mbox{\hyperlink{classalgebra_1_1Matrix}{Matrix}}$<$ U, Storage\+Order\+::\+Rows $>$ \&M, \mbox{\hyperlink{classalgebra_1_1Matrix}{Matrix}}$<$ U, K $>$ \&m)
+\begin{DoxyCompactList}\small\item\em Matrix-\/vector product (friend operator) \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$typename T, Storage\+Order S = Storage\+Order\+::\+Rows$>$\newline
+class algebra\+::\+Matrix$<$ T, S $>$}
+
+\mbox{\hyperlink{classalgebra_1_1Matrix}{Matrix}} template class that considers row ordered matrices as its default case. It can deal with both uncompressed matrices and with CSR matrices. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & type of the \mbox{\hyperlink{classalgebra_1_1Matrix}{Matrix}} object elements \\
+\hline
+{\em S} & Storage\+Order of the matrix (either Storage\+Order\+::\+Rows or Storage\+Oder\+::\+Columns) \\
+\hline
+\end{DoxyTemplParams}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classalgebra_1_1Matrix_a1d1d4e89cddb5cb494e8679bf1a7ba71}\label{classalgebra_1_1Matrix_a1d1d4e89cddb5cb494e8679bf1a7ba71}} 
+\index{algebra::Matrix$<$ T, S $>$@{algebra::Matrix$<$ T, S $>$}!Matrix@{Matrix}}
+\index{Matrix@{Matrix}!algebra::Matrix$<$ T, S $>$@{algebra::Matrix$<$ T, S $>$}}
+\doxysubsubsection{\texorpdfstring{Matrix()}{Matrix()}}
+{\footnotesize\ttfamily template$<$typename T , Storage\+Order S = Storage\+Order\+::\+Rows$>$ \\
+\mbox{\hyperlink{classalgebra_1_1Matrix}{algebra\+::\+Matrix}}$<$ T, S $>$\+::\mbox{\hyperlink{classalgebra_1_1Matrix}{Matrix}} (\begin{DoxyParamCaption}\item[{unsigned}]{\+\_\+n\+\_\+rows,  }\item[{unsigned}]{\+\_\+n\+\_\+cols }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Constructor that initializes an uncompressed matrix of zeros with the specified dimensions. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em \+\_\+n\+\_\+rows} & Desired number of rows \\
+\hline
+{\em \+\_\+n\+\_\+cols} & Desired number of columns \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classalgebra_1_1Matrix_a64d1ed3009a58f66d695c58497492fdb}\label{classalgebra_1_1Matrix_a64d1ed3009a58f66d695c58497492fdb}} 
+\index{algebra::Matrix$<$ T, S $>$@{algebra::Matrix$<$ T, S $>$}!columns@{columns}}
+\index{columns@{columns}!algebra::Matrix$<$ T, S $>$@{algebra::Matrix$<$ T, S $>$}}
+\doxysubsubsection{\texorpdfstring{columns()}{columns()}}
+{\footnotesize\ttfamily template$<$typename T , Storage\+Order S = Storage\+Order\+::\+Rows$>$ \\
+unsigned \mbox{\hyperlink{classalgebra_1_1Matrix}{algebra\+::\+Matrix}}$<$ T, S $>$\+::columns (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Getter for the number of columns of the matrix. 
+
+\begin{DoxyReturn}{Returns}
+The private member n\+\_\+cols 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classalgebra_1_1Matrix_ae6b0818ff1d5703d067698c78d2cac41}\label{classalgebra_1_1Matrix_ae6b0818ff1d5703d067698c78d2cac41}} 
+\index{algebra::Matrix$<$ T, S $>$@{algebra::Matrix$<$ T, S $>$}!compress@{compress}}
+\index{compress@{compress}!algebra::Matrix$<$ T, S $>$@{algebra::Matrix$<$ T, S $>$}}
+\doxysubsubsection{\texorpdfstring{compress()}{compress()}}
+{\footnotesize\ttfamily template$<$typename T , Storage\+Order S$>$ \\
+void \mbox{\hyperlink{classalgebra_1_1Matrix}{algebra\+::\+Matrix}}$<$ T, S $>$\+::compress}
+
+
+
+Method that converts an uncompressed matrix into a compressed format (The default is CSR) by updating its private members. 
+
+If the matrix is already compressed I exit the function
+
+flag to check when the first non null element of a row is
+
+I reset the flag when I go to the next row in the matrix
+
+store nnz value
+
+when the row has the first non zero element
+
+store the number of non zero elements before reaching this element
+
+I count the non-\/zero elements
+
+I clear the map for the COOmap format\mbox{\Hypertarget{classalgebra_1_1Matrix_a779259a8e0839cd5480a00f97cb4f233}\label{classalgebra_1_1Matrix_a779259a8e0839cd5480a00f97cb4f233}} 
+\index{algebra::Matrix$<$ T, S $>$@{algebra::Matrix$<$ T, S $>$}!get\_inner\_indices@{get\_inner\_indices}}
+\index{get\_inner\_indices@{get\_inner\_indices}!algebra::Matrix$<$ T, S $>$@{algebra::Matrix$<$ T, S $>$}}
+\doxysubsubsection{\texorpdfstring{get\_inner\_indices()}{get\_inner\_indices()}}
+{\footnotesize\ttfamily template$<$typename T , Storage\+Order S = Storage\+Order\+::\+Rows$>$ \\
+std\+::vector$<$std\+::size\+\_\+t$>$ \mbox{\hyperlink{classalgebra_1_1Matrix}{algebra\+::\+Matrix}}$<$ T, S $>$\+::get\+\_\+inner\+\_\+indices (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Getter for the vector of inner indices, in the default case of a matrix ordered by rows it has the size of n\+\_\+rows+1 and contains the starting index for each row. 
+
+\begin{DoxyReturn}{Returns}
+The private member inner\+\_\+indices (not empty only if the matrix is compressed) 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classalgebra_1_1Matrix_a98d913709713ee44a5f432b7125503d2}\label{classalgebra_1_1Matrix_a98d913709713ee44a5f432b7125503d2}} 
+\index{algebra::Matrix$<$ T, S $>$@{algebra::Matrix$<$ T, S $>$}!get\_outer\_indices@{get\_outer\_indices}}
+\index{get\_outer\_indices@{get\_outer\_indices}!algebra::Matrix$<$ T, S $>$@{algebra::Matrix$<$ T, S $>$}}
+\doxysubsubsection{\texorpdfstring{get\_outer\_indices()}{get\_outer\_indices()}}
+{\footnotesize\ttfamily template$<$typename T , Storage\+Order S = Storage\+Order\+::\+Rows$>$ \\
+std\+::vector$<$std\+::size\+\_\+t$>$ \mbox{\hyperlink{classalgebra_1_1Matrix}{algebra\+::\+Matrix}}$<$ T, S $>$\+::get\+\_\+outer\+\_\+indices (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Getter for the vector of outer indices of the matrix. In the default case of a matrix ordered by rows it contains the column index corresponding to each non zero value. 
+
+\begin{DoxyReturn}{Returns}
+The private member outer\+\_\+indices (not empty only if the matrix is compressed) of size n\+\_\+nnz. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classalgebra_1_1Matrix_aab236d08b9b66b4397c99a5ed1660c07}\label{classalgebra_1_1Matrix_aab236d08b9b66b4397c99a5ed1660c07}} 
+\index{algebra::Matrix$<$ T, S $>$@{algebra::Matrix$<$ T, S $>$}!get\_values@{get\_values}}
+\index{get\_values@{get\_values}!algebra::Matrix$<$ T, S $>$@{algebra::Matrix$<$ T, S $>$}}
+\doxysubsubsection{\texorpdfstring{get\_values()}{get\_values()}}
+{\footnotesize\ttfamily template$<$typename T , Storage\+Order S = Storage\+Order\+::\+Rows$>$ \\
+std\+::vector$<$T$>$ \mbox{\hyperlink{classalgebra_1_1Matrix}{algebra\+::\+Matrix}}$<$ T, S $>$\+::get\+\_\+values (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Getter for the vector of values (not empty only if the matrix is in the compressed format) 
+
+\begin{DoxyReturn}{Returns}
+A vector of size equal to the value of n\+\_\+nnz containing the corresponding values 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classalgebra_1_1Matrix_a8889930e0702930ccec966238c5960b6}\label{classalgebra_1_1Matrix_a8889930e0702930ccec966238c5960b6}} 
+\index{algebra::Matrix$<$ T, S $>$@{algebra::Matrix$<$ T, S $>$}!is\_compressed@{is\_compressed}}
+\index{is\_compressed@{is\_compressed}!algebra::Matrix$<$ T, S $>$@{algebra::Matrix$<$ T, S $>$}}
+\doxysubsubsection{\texorpdfstring{is\_compressed()}{is\_compressed()}}
+{\footnotesize\ttfamily template$<$typename T , Storage\+Order S = Storage\+Order\+::\+Rows$>$ \\
+bool \mbox{\hyperlink{classalgebra_1_1Matrix}{algebra\+::\+Matrix}}$<$ T, S $>$\+::is\+\_\+compressed (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Method that checks the format of a matrix. 
+
+\begin{DoxyReturn}{Returns}
+The private member compressed 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classalgebra_1_1Matrix_aa5694b988e62b0e496d3c48ca8042d6a}\label{classalgebra_1_1Matrix_aa5694b988e62b0e496d3c48ca8042d6a}} 
+\index{algebra::Matrix$<$ T, S $>$@{algebra::Matrix$<$ T, S $>$}!map\_to\_vec@{map\_to\_vec}}
+\index{map\_to\_vec@{map\_to\_vec}!algebra::Matrix$<$ T, S $>$@{algebra::Matrix$<$ T, S $>$}}
+\doxysubsubsection{\texorpdfstring{map\_to\_vec()}{map\_to\_vec()}}
+{\footnotesize\ttfamily template$<$typename T , Storage\+Order S = Storage\+Order\+::\+Rows$>$ \\
+std\+::vector$<$T$>$ \mbox{\hyperlink{classalgebra_1_1Matrix}{algebra\+::\+Matrix}}$<$ T, S $>$\+::map\+\_\+to\+\_\+vec (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Method that copies the COOmap member into a vector and returns it. 
+
+\begin{DoxyReturn}{Returns}
+The aforementioned vector ~\newline
+ 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classalgebra_1_1Matrix_a183ce46767bd18a9faf4eeecbbfff697}\label{classalgebra_1_1Matrix_a183ce46767bd18a9faf4eeecbbfff697}} 
+\index{algebra::Matrix$<$ T, S $>$@{algebra::Matrix$<$ T, S $>$}!nnz@{nnz}}
+\index{nnz@{nnz}!algebra::Matrix$<$ T, S $>$@{algebra::Matrix$<$ T, S $>$}}
+\doxysubsubsection{\texorpdfstring{nnz()}{nnz()}}
+{\footnotesize\ttfamily template$<$typename T , Storage\+Order S = Storage\+Order\+::\+Rows$>$ \\
+unsigned \mbox{\hyperlink{classalgebra_1_1Matrix}{algebra\+::\+Matrix}}$<$ T, S $>$\+::nnz (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Getter for the number of non zero elements of the matrix. 
+
+\begin{DoxyReturn}{Returns}
+The private member n\+\_\+nnz 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classalgebra_1_1Matrix_a763ef87bc50aa62e0db088c9cfe1ebd1}\label{classalgebra_1_1Matrix_a763ef87bc50aa62e0db088c9cfe1ebd1}} 
+\index{algebra::Matrix$<$ T, S $>$@{algebra::Matrix$<$ T, S $>$}!operator()@{operator()}}
+\index{operator()@{operator()}!algebra::Matrix$<$ T, S $>$@{algebra::Matrix$<$ T, S $>$}}
+\doxysubsubsection{\texorpdfstring{operator()()}{operator()()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily template$<$typename T , Storage\+Order S$>$ \\
+T \& \mbox{\hyperlink{classalgebra_1_1Matrix}{algebra\+::\+Matrix}}$<$ T, S $>$\+::operator() (\begin{DoxyParamCaption}\item[{const std\+::size\+\_\+t \&}]{\+\_\+i,  }\item[{const std\+::size\+\_\+t \&}]{\+\_\+j }\end{DoxyParamCaption})}
+
+
+
+Call operator (non const version). The user is not allowed to insert a value that exceeds the matrix dimensions when it is in the compressed state. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em \+\_\+i} & Row index \\
+\hline
+{\em \+\_\+j} & Column index \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A reference to the corresponding element of the matrix 
+\end{DoxyReturn}
+If the user tries to add a new element when the matrix is in a compressed state, return an error
+
+just to be safe
+
+I am cycling through the non null elements of the row
+
+If the element is non null I return it
+
+If I get a zero element return a default value for T
+
+if the element is not within bounds I have to adjust the matrix dimensions
+
+I insert a default value for T to make the matrix have enough rows and columns to be rectangular after inserting the new element
+
+i fix the matrix dimensions
+
+I return a reference to the new element\mbox{\Hypertarget{classalgebra_1_1Matrix_a32ad14e11f526d51098a7ffd517bd219}\label{classalgebra_1_1Matrix_a32ad14e11f526d51098a7ffd517bd219}} 
+\index{algebra::Matrix$<$ T, S $>$@{algebra::Matrix$<$ T, S $>$}!operator()@{operator()}}
+\index{operator()@{operator()}!algebra::Matrix$<$ T, S $>$@{algebra::Matrix$<$ T, S $>$}}
+\doxysubsubsection{\texorpdfstring{operator()()}{operator()()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily template$<$typename T , Storage\+Order S$>$ \\
+const T \& \mbox{\hyperlink{classalgebra_1_1Matrix}{algebra\+::\+Matrix}}$<$ T, S $>$\+::operator() (\begin{DoxyParamCaption}\item[{const std\+::size\+\_\+t \&}]{i,  }\item[{const std\+::size\+\_\+t \&}]{j }\end{DoxyParamCaption}) const}
+
+
+
+Call operator (const version) 
+
+
+\begin{DoxyParams}{Parameters}
+{\em i} & Row index \\
+\hline
+{\em j} & Column index \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A const reference to the corresponding element of the matrix 
+\end{DoxyReturn}
+I check if I am within the matrix dimensions
+
+I chose not to return a quiet\+NaN to be more general
+
+I am cycling through the non null elements of the row
+
+If the element is non null I return it
+
+If the element is null I return the default value\mbox{\Hypertarget{classalgebra_1_1Matrix_a10289cf1140acf4c12282542d9e35c59}\label{classalgebra_1_1Matrix_a10289cf1140acf4c12282542d9e35c59}} 
+\index{algebra::Matrix$<$ T, S $>$@{algebra::Matrix$<$ T, S $>$}!read\_market\_matrix@{read\_market\_matrix}}
+\index{read\_market\_matrix@{read\_market\_matrix}!algebra::Matrix$<$ T, S $>$@{algebra::Matrix$<$ T, S $>$}}
+\doxysubsubsection{\texorpdfstring{read\_market\_matrix()}{read\_market\_matrix()}}
+{\footnotesize\ttfamily template$<$typename T , Storage\+Order S$>$ \\
+\mbox{\hyperlink{classalgebra_1_1Matrix}{Matrix}}$<$ T, Storage\+Order\+::\+Rows $>$ \mbox{\hyperlink{classalgebra_1_1Matrix}{algebra\+::\+Matrix}}$<$ T, S $>$\+::read\+\_\+market\+\_\+matrix (\begin{DoxyParamCaption}\item[{const char $\ast$}]{filename }\end{DoxyParamCaption})}
+
+
+
+Method that reads a matrix in a \mbox{\hyperlink{classalgebra_1_1Matrix}{Matrix}} Market format. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em filename} & The name of the file from which the matrix will be read from \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A matrix in the uncompressed format ~\newline
+ 
+\end{DoxyReturn}
+check if the file has opened correctly
+
+check if the banner has been successfully read
+
+check if the matrix is a general real matrix
+
+check if the dimensions have been all read correctly
+
+I call the constructor
+
+I insert the non zero values in the matrix
+
+It has to be considered that now the indices have to start from 0
+
+I close the file\mbox{\Hypertarget{classalgebra_1_1Matrix_a44a5df26a696c80f3d1870f592d6e560}\label{classalgebra_1_1Matrix_a44a5df26a696c80f3d1870f592d6e560}} 
+\index{algebra::Matrix$<$ T, S $>$@{algebra::Matrix$<$ T, S $>$}!resize@{resize}}
+\index{resize@{resize}!algebra::Matrix$<$ T, S $>$@{algebra::Matrix$<$ T, S $>$}}
+\doxysubsubsection{\texorpdfstring{resize()}{resize()}}
+{\footnotesize\ttfamily template$<$typename T , Storage\+Order S$>$ \\
+void \mbox{\hyperlink{classalgebra_1_1Matrix}{algebra\+::\+Matrix}}$<$ T, S $>$\+::resize (\begin{DoxyParamCaption}\item[{const unsigned \&}]{newrows,  }\item[{const unsigned \&}]{newcols }\end{DoxyParamCaption})}
+
+
+
+Method that resizes the matrix to have the desired dimensions. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em newrows} & Desired number of rows \\
+\hline
+{\em newcols} & Desired number of columns \\
+\hline
+\end{DoxyParams}
+to be safe
+
+If the element is not of the default value I decrease the number of non zero elements
+
+I erase the elements out of range for the new dimensions
+
+number of elements to erase
+
+I delete the outer indices corresponding to the non zero elements to erase
+
+I delete the values corresponding to the non zero elements to erase
+
+I delete the inner indices corresponding to the deleted rows
+
+I adjust the indices
+
+I update the dimensions\mbox{\Hypertarget{classalgebra_1_1Matrix_a8112eabe32b213a52b4d5119a96deae0}\label{classalgebra_1_1Matrix_a8112eabe32b213a52b4d5119a96deae0}} 
+\index{algebra::Matrix$<$ T, S $>$@{algebra::Matrix$<$ T, S $>$}!rows@{rows}}
+\index{rows@{rows}!algebra::Matrix$<$ T, S $>$@{algebra::Matrix$<$ T, S $>$}}
+\doxysubsubsection{\texorpdfstring{rows()}{rows()}}
+{\footnotesize\ttfamily template$<$typename T , Storage\+Order S = Storage\+Order\+::\+Rows$>$ \\
+unsigned \mbox{\hyperlink{classalgebra_1_1Matrix}{algebra\+::\+Matrix}}$<$ T, S $>$\+::rows (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Getter for the number of rows of the matrix. 
+
+\begin{DoxyReturn}{Returns}
+The private member n\+\_\+rows 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classalgebra_1_1Matrix_a9ce310a73e7999f9f3068ec8833ce811}\label{classalgebra_1_1Matrix_a9ce310a73e7999f9f3068ec8833ce811}} 
+\index{algebra::Matrix$<$ T, S $>$@{algebra::Matrix$<$ T, S $>$}!uncompress@{uncompress}}
+\index{uncompress@{uncompress}!algebra::Matrix$<$ T, S $>$@{algebra::Matrix$<$ T, S $>$}}
+\doxysubsubsection{\texorpdfstring{uncompress()}{uncompress()}}
+{\footnotesize\ttfamily template$<$typename T , Storage\+Order S$>$ \\
+void \mbox{\hyperlink{classalgebra_1_1Matrix}{algebra\+::\+Matrix}}$<$ T, S $>$\+::uncompress}
+
+
+
+Method that converts an compressed matrix (CSR by default) into an uncompressed format (ordered ny rows as default) by updating its private members. 
+
+If already uncompressed I exit
+
+I start by creating a map of the right length
+
+here I keep track of what row I am at
+
+clear the vectors
+
+\doxysubsection{Friends And Related Function Documentation}
+\mbox{\Hypertarget{classalgebra_1_1Matrix_ac95b082e5e33cafd1a519aec0f80e9d4}\label{classalgebra_1_1Matrix_ac95b082e5e33cafd1a519aec0f80e9d4}} 
+\index{algebra::Matrix$<$ T, S $>$@{algebra::Matrix$<$ T, S $>$}!operator$\ast$@{operator$\ast$}}
+\index{operator$\ast$@{operator$\ast$}!algebra::Matrix$<$ T, S $>$@{algebra::Matrix$<$ T, S $>$}}
+\doxysubsubsection{\texorpdfstring{operator$\ast$}{operator*}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily template$<$typename T , Storage\+Order S = Storage\+Order\+::\+Rows$>$ \\
+template$<$typename U , Storage\+Order K$>$ \\
+std\+::vector$<$U$>$ operator$\ast$ (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classalgebra_1_1Matrix}{Matrix}}$<$ U, Storage\+Order\+::\+Rows $>$ \&}]{M,  }\item[{\mbox{\hyperlink{classalgebra_1_1Matrix}{Matrix}}$<$ U, K $>$ \&}]{m }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [friend]}}
+
+
+
+Matrix-\/vector product (friend operator) 
+
+
+\begin{DoxyParams}{Parameters}
+{\em M} & \mbox{\hyperlink{classalgebra_1_1Matrix}{Matrix}} to be multiplied (row ordered) \\
+\hline
+{\em m} & A matrix having only one column to be multiplied \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A vector (result of the operatrion) 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classalgebra_1_1Matrix_ae2a6cb2bbe15155e2fbc1db9497c62fe}\label{classalgebra_1_1Matrix_ae2a6cb2bbe15155e2fbc1db9497c62fe}} 
+\index{algebra::Matrix$<$ T, S $>$@{algebra::Matrix$<$ T, S $>$}!operator$\ast$@{operator$\ast$}}
+\index{operator$\ast$@{operator$\ast$}!algebra::Matrix$<$ T, S $>$@{algebra::Matrix$<$ T, S $>$}}
+\doxysubsubsection{\texorpdfstring{operator$\ast$}{operator*}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily template$<$typename T , Storage\+Order S = Storage\+Order\+::\+Rows$>$ \\
+template$<$typename U $>$ \\
+std\+::vector$<$U$>$ operator$\ast$ (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classalgebra_1_1Matrix}{Matrix}}$<$ U, Storage\+Order\+::\+Rows $>$ \&}]{M,  }\item[{std\+::vector$<$ U $>$ \&}]{v }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [friend]}}
+
+
+
+Matrix-\/vector product (friend operator) 
+
+
+\begin{DoxyParams}{Parameters}
+{\em M} & \mbox{\hyperlink{classalgebra_1_1Matrix}{Matrix}} to be multiplied (row ordered) \\
+\hline
+{\em v} & Vector to be multiplied \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A vector (result of the operatrion) 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{Matrix_8hpp}{Matrix.\+hpp}}\item 
+\mbox{\hyperlink{Matrix__impl_8hpp}{Matrix\+\_\+impl.\+hpp}}\end{DoxyCompactItemize}
