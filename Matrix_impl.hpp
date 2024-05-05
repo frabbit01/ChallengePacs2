@@ -26,7 +26,7 @@ namespace algebra{
         if(newrows>n_rows||newcols>n_cols){
             auto old_nnz=n_nnz;
             (*this)(newrows-1,newcols-1)=default_t;
-            n_nnz=old_nnz; //to be safe
+            n_nnz=old_nnz; ///to be safe
             return;
         }
         if(!compressed){
