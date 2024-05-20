@@ -1,13 +1,15 @@
 /**
  * @file Matrix_impl.hpp
  * @author Francesca Visalli (frabbit01)
- * @brief implemenation of Matrix class methods (thought for the default case of row ordered matrices)
+ * @brief implemenation of Matrix class methods (thought for the default case of
+ * row ordered matrices)
  * @version 0.1
  * @date 2024-05-03
- * 
+ *
  * @copyright Copyright (c) 2024
- * 
+ *
  */
+// clang-format off
 #ifndef MATRIX_IMPL_HPP
 #define MATRIX_IMPL_HPP
 
@@ -25,6 +27,7 @@ namespace algebra{
     Matrix<T,S>::resize(const unsigned & newrows, const unsigned &newcols){
         if(newrows>n_rows||newcols>n_cols){
             auto old_nnz=n_nnz;
+            //@note I do not understand what are you doing here.
             (*this)(newrows-1,newcols-1)=default_t;
             n_nnz=old_nnz; ///to be safe
             return;
@@ -34,6 +37,8 @@ namespace algebra{
                 for(std::size_t j=0;j<n_cols;++j){
                     if(i>=newrows||j>=newcols){
                         std::array<std::size_t,2> key={i,j};
+                        //@note I do not understand what you are doing here. YOu should check if the element is  present and if it is so delete it.
+                        // rather simple.
                         if(COOmap[key]!=default_t)
                             --n_nnz; ///If the element is not of the default value I decrease the number of non zero elements
                         COOmap.erase(key); ///I erase the elements out of range for the new dimensions
@@ -42,6 +47,9 @@ namespace algebra{
             }
         }
         else{
+            //@note Operating a resize directly on the compressed matrix is very complicated and error prone. I would have
+            // uncompressed the matrix, resized it and then compressed it again. SImpler and safer.
+            // Anyway, I appreciate the attempt.
             std::size_t diff=n_nnz-inner_indices[newrows]; ///number of elements to erase
             auto last=outer_indices.end(); ///I delete the outer indices corresponding to the non zero elements to erase
             auto first=last-diff;
@@ -87,8 +95,15 @@ namespace algebra{
         outer_indices=std::vector<std::size_t>(n_nnz);
         values=std::vector<T>(n_nnz);
         std::size_t count=0,i=0,row=0;
-        bool start_row=true;///flag to check when the first non null element of a row is
-        for(auto iter=COOmap.begin();iter!=COOmap.end();++iter){
+        bool start_row=true;
+        //@note Very complicated. You could have exploited the fact thet the map is ordered. For instance, with
+        // auto const start = COOmap.lower_bound({i,0});
+        // auto const end = COOmap.upper_bound({i+1,0});
+        // you have the iterators from the beginning to past-the-end of row i.
+        // So, you can fill your compressed arrays row by row, which is simpler than what you have done. 
+        // you can do similarly for column ordering.
+
+              for(auto iter=COOmap.begin();iter!=COOmap.end();++iter){
             if(iter->first[0]!=row){ ///I reset the flag when I go to the next row in the matrix
                 start_row=false;
                 ++row;
@@ -115,6 +130,8 @@ namespace algebra{
         if(!compressed) ///If already uncompressed I exit
             return;
         ///I start by creating a map of the right length
+        ///@note NO, you just have to fill the non zero element by looping the compressed vectors!
+        // Again, you are making your life complicated!
         for(std::size_t i=0;i<n_rows;++i){
             for(std::size_t j=0;j<n_cols;++j){
                 std::array<std::size_t,2> key={i,j};
@@ -156,6 +173,9 @@ namespace algebra{
             if(outer_indices[k]==j)
                 return values[k]; ///If the element is non null I return it
         }
+        //@note No, returning a local constant expression by reference is a very bad idea.
+        // What if the user wants to change the value? In the non const version, if the matrix is uncompressed it should be an error to try to
+        // access an element that is not present.
         return 0; ///If the element is null I return the default value
     }
 
@@ -313,10 +333,15 @@ namespace algebra{
         Matrix<T,StorageOrder::Rows> result(rows,cols);
         result.set_nnz(nnz);
         ///I insert the non zero values in the matrix
+        //@note nnz could have been declared as unsigned int of std::size_t. Being just an int you have
+        //an annoying warning since in k<nnz you are comparing an unsigned with a signed integer and the compiler
+        //warns you about it. It is not a problem here, but quite annoying to have warnings. Solution: declare nnz as unsigned.
         for(std::size_t k=0;k<nnz;++k){
             std::size_t i,j;
             T value;
+            //@note  Another warning here. i, and j are declared as size_t, so long unsigned int, so you need to use %lu not %ld 
             fscanf(f,"%ld %ld %lg\n",&i,&j,&value);
+            //@note fscanf returns a staatues, so you should check it. 
             result(i-1,j-1)=value; ///It has to be considered that now the indices have to start from 0
         }
         ///I close the file

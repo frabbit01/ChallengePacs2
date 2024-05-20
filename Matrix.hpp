@@ -1,22 +1,23 @@
 /**
  * @file Matrix.hpp
  * @author Francesca Visalli (frabbit01)
- * @brief Template Class Matrix and its specialization for column ordered matrices
- * In this file you will find the declaration of all the methods and members of the Matrix class. 
- * For their definitions take a look at Matrix_impl.hpp and Matrix_csc.hpp
- * 
+ * @brief Template Class Matrix and its specialization for column ordered
+ * matrices In this file you will find the declaration of all the methods and
+ * members of the Matrix class. For their definitions take a look at
+ * Matrix_impl.hpp and Matrix_csc.hpp
+ *
  * Among the inclusions I included also a library published on the mnist site
- * 
+ *
  * @version 0.1
  * @date 2024-05-03
- * 
+ *
  * @copyright Copyright (c) 2024
- * 
+ *
  */
 
 #ifndef MATRIX_HPP
 #define MATRIX_HPP
-
+// clang-format off
 #include<iostream>
 #include<map>
 #include<vector>
@@ -24,7 +25,10 @@
 #include "mmio.hpp" //I included the library that is published on the mnist site, of which the link was attached in the given pdf file
 #include<fstream>
 #include<string>
+//@note For misterous reasons your version of the compiler does not require to include <array>< when using arrays!
+#include<array>
 namespace algebra{
+    //@note good documentation with doxygen!
     /**
      * @brief Enumerated class that defines the ordainement of a Matrix object
      * enumerator list is {Rows, Columns}
@@ -71,6 +75,8 @@ namespace algebra{
             }
             /*SETTER*/
             /// @brief Setter which allows the user to set a value for the private member n_nnz. Its call is recommended after an insertion, especially of a null element, to avoid undefined behaviour after compression
+            //@note I would not expose this setter to the fgeneral public. Too dangerous. It is used only internally, so it should be private.
+            // Maybe is also useless since members can modifie nnz without the need of a setter
             void set_nnz(unsigned n){n_nnz=n;}
             
             /*OTHER PUBLIC METHODS*/
@@ -100,7 +106,9 @@ namespace algebra{
             /// @param _n_cols Desired number of columns
             Matrix(unsigned _n_rows,unsigned _n_cols): 
             n_rows(_n_rows),n_cols(_n_cols),n_nnz(0),compressed(false),default_t(0){
-                T default_t;
+                //T default_t; //@note You are redefining the default_t variable here, but it is already defined in the private section of the class
+                // and I suppose you wanted to use that one. I have commented it out.
+                // Otherwise, you are using the local variable and not the member variable!
                 for(std::size_t i=0;i<n_rows;++i){
                     for(std::size_t j=0;j<n_cols;++j){
                         std::array<std::size_t,2> key={i,j};
@@ -130,6 +138,7 @@ namespace algebra{
             /// @param M Matrix to be multiplied (row ordered)
             /// @param m A matrix having only one column to be multiplied
             /// @return A vector (result of the operatrion)
+            // @note I dont understand why you are limiting to the case of RowMajor matrices.
             template<typename U,StorageOrder K>
             friend std::vector<U> operator * (Matrix<U,StorageOrder::Rows> & M, Matrix<U,K> &m);
         private:
@@ -142,13 +151,15 @@ namespace algebra{
             std::vector<T> values; /// I initialize this in the compress method; values vector
 
             ///COOmap format
+            //@note the simplest way to accomodate row and column ordering when using a map is to change the comparator function
+            // The column ordered version compare the second element first and then the first element.
             std::map<std::array<std::size_t,2>,T> COOmap;
 
             ///check for format
             bool compressed;
 
             ///member I use to return 0 element for any type T
-            T default_t= 0;
+            T default_t= 0; //@note it could be static, since it is the same for all the instances of the class, I suppose.
     };
 
     /**
@@ -169,6 +180,9 @@ namespace algebra{
          * @return true when either the second element of the first array is less than the second element of rhs or when they're equal but the first element of lhs is smaller then the second element of rhs 
          * @return false otherwise
          */
+        //@note You are redefining the comparison operator for the array. I suppose to use it in the map. But it is better to create a functor and 
+        // pass it to the map as third template parameter. Overloading < propagates the behaviour to all comparisons of arrays of 2 doubles in the methods of this class, which maybe confusiong and prone
+        // to error. When redefining a comparison operator is meant to have a localised effect, it is better to use a functor.
         bool operator()(const std::array<std::size_t, 2>& lhs, const std::array<std::size_t, 2>& rhs) const {
             if (lhs[1] < rhs[1])
                 return true;
@@ -183,6 +197,9 @@ namespace algebra{
      * 
      * @tparam T type of the matrix elements
      */
+    //@note Now I undertand. You have made a specialization of the whole class. Not necessary, you are duplicating a lot of stuff!
+    // you can just specialize some methods, or use if constexpr, and set the comparison operator aaccording to the ordering, thus keeping
+    // the same class for both cases. 
     template<typename T> class Matrix<T,StorageOrder::Columns>{
         public:
             /*GETTERS*/
@@ -252,7 +269,9 @@ namespace algebra{
             /// @param _n_cols Desired number of columns
             Matrix(unsigned _n_rows,unsigned _n_cols):  //constructor that takes size of the matrix as input
             n_rows(_n_rows),n_cols(_n_cols),n_nnz(0),compressed(false),default_t(0){
-                T default_t;
+                //T default_t;//@note You are redefining the default_t variable here, but it is already defined in the private section of the class
+                // Moreover it is uninitialised. This can cause serious problems. I suppose you wanted to use the default_t member of the class.
+                // I have commented it out
                 for(std::size_t i=0;i<n_rows;++i){
                     for(std::size_t j=0;j<n_cols;++j){
                         std::array<std::size_t,2> key={i,j};
